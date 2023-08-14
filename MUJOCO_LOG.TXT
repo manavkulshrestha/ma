@@ -1,0 +1,252 @@
+Tue Aug  8 16:03:50 2023
+WARNING: mju_openResource: unknown file 'mjcf/robor/tb3t.xml'
+
+Tue Aug  8 16:04:25 2023
+WARNING: OpenGL error 0x502 in or before mjr_makeContext
+
+Tue Aug  8 17:03:30 2023
+WARNING: OpenGL error 0x502 in or before mjr_makeContext
+
+Tue Aug  8 17:04:58 2023
+WARNING: OpenGL error 0x502 in or before mjr_makeContext
+
+Tue Aug  8 17:15:37 2023
+WARNING: OpenGL error 0x502 in or before mjr_makeContext
+
+Tue Aug  8 17:16:46 2023
+WARNING: OpenGL error 0x502 in or before mjr_makeContext
+
+Tue Aug  8 17:18:14 2023
+WARNING: OpenGL error 0x502 in or before mjr_makeContext
+
+Tue Aug  8 17:19:19 2023
+WARNING: OpenGL error 0x502 in or before mjr_makeContext
+
+Tue Aug  8 17:21:57 2023
+WARNING: OpenGL error 0x502 in or before mjr_makeContext
+
+Tue Aug  8 17:22:21 2023
+WARNING: OpenGL error 0x502 in or before mjr_makeContext
+
+Tue Aug  8 17:23:01 2023
+WARNING: OpenGL error 0x502 in or before mjr_makeContext
+
+Tue Aug  8 17:32:48 2023
+WARNING: OpenGL error 0x502 in or before mjr_makeContext
+
+Tue Aug  8 17:33:17 2023
+WARNING: OpenGL error 0x502 in or before mjr_makeContext
+
+Tue Aug  8 17:39:53 2023
+WARNING: OpenGL error 0x502 in or before mjr_makeContext
+
+Tue Aug  8 17:40:48 2023
+WARNING: OpenGL error 0x502 in or before mjr_makeContext
+
+Tue Aug  8 17:42:03 2023
+WARNING: OpenGL error 0x502 in or before mjr_makeContext
+
+Tue Aug  8 17:42:33 2023
+WARNING: OpenGL error 0x502 in or before mjr_makeContext
+
+Tue Aug  8 17:44:41 2023
+WARNING: OpenGL error 0x502 in or before mjr_makeContext
+
+Wed Aug  9 14:05:26 2023
+WARNING: OpenGL error 0x502 in or before mjr_makeContext
+
+Wed Aug  9 14:07:01 2023
+WARNING: OpenGL error 0x502 in or before mjr_makeContext
+
+Wed Aug  9 14:09:57 2023
+WARNING: mju_openResource: unknown file 'mjcf/robot/mjmodel.xml'
+
+Wed Aug  9 14:10:04 2023
+WARNING: mju_openResource: unknown file 'mjcf/robot/mjmodel.xml'
+
+Wed Aug  9 14:10:10 2023
+WARNING: OpenGL error 0x502 in or before mjr_makeContext
+
+Wed Aug  9 14:10:19 2023
+WARNING: OpenGL error 0x502 in or before mjr_makeContext
+
+Wed Aug  9 14:20:22 2023
+WARNING: mju_openResource: unknown file '/path/to/mjcf.xml'
+
+Wed Aug  9 14:21:06 2023
+WARNING: OpenGL error 0x502 in or before mjr_makeContext
+
+Mon Aug 14 13:31:22 2023
+WARNING: OpenGL error 0x502 in or before mjr_makeContext
+
+Mon Aug 14 13:31:57 2023
+WARNING: OpenGL error 0x502 in or before mjr_makeContext
+
+Mon Aug 14 13:32:46 2023
+WARNING: OpenGL error 0x502 in or before mjr_makeContext
+
+Mon Aug 14 13:35:25 2023
+WARNING: OpenGL error 0x502 in or before mjr_makeContext
+
+Mon Aug 14 13:36:23 2023
+WARNING: OpenGL error 0x502 in or before mjr_makeContext
+
+Mon Aug 14 13:36:45 2023
+WARNING: OpenGL error 0x502 in or before mjr_makeContext
+
+Mon Aug 14 13:38:25 2023
+WARNING: OpenGL error 0x502 in or before mjr_makeContext
+
+Mon Aug 14 13:40:03 2023
+WARNING: OpenGL error 0x502 in or before mjr_makeContext
+
+Mon Aug 14 13:42:20 2023
+WARNING: OpenGL error 0x502 in or before mjr_makeContext
+
+Mon Aug 14 13:42:27 2023
+WARNING: Nan, Inf or huge value in QACC at DOF 0. The simulation is unstable. Time = 7.5480.
+
+Mon Aug 14 13:43:41 2023
+WARNING: Nan, Inf or huge value in QACC at DOF 2. The simulation is unstable. Time = 23.6280.
+
+Mon Aug 14 13:46:55 2023
+WARNING: OpenGL error 0x502 in or before mjr_makeContext
+
+Mon Aug 14 13:49:01 2023
+WARNING: OpenGL error 0x502 in or before mjr_makeContext
+
+Mon Aug 14 13:51:19 2023
+WARNING: OpenGL error 0x502 in or before mjr_makeContext
+
+Mon Aug 14 13:51:41 2023
+WARNING: OpenGL error 0x502 in or before mjr_makeContext
+
+Mon Aug 14 13:52:22 2023
+WARNING: OpenGL error 0x502 in or before mjr_makeContext
+
+Mon Aug 14 13:53:14 2023
+WARNING: OpenGL error 0x502 in or before mjr_makeContext
+
+Mon Aug 14 13:54:16 2023
+WARNING: OpenGL error 0x502 in or before mjr_makeContext
+
+Mon Aug 14 13:55:27 2023
+WARNING: OpenGL error 0x502 in or before mjr_makeContext
+
+Mon Aug 14 13:56:33 2023
+WARNING: OpenGL error 0x502 in or before mjr_makeContext
+
+Mon Aug 14 13:57:54 2023
+WARNING: OpenGL error 0x502 in or before mjr_makeContext
+
+Mon Aug 14 14:01:25 2023
+WARNING: OpenGL error 0x502 in or before mjr_makeContext
+
+Mon Aug 14 14:03:45 2023
+WARNING: OpenGL error 0x502 in or before mjr_makeContext
+
+Mon Aug 14 14:04:05 2023
+WARNING: OpenGL error 0x502 in or before mjr_makeContext
+
+Mon Aug 14 14:06:32 2023
+WARNING: OpenGL error 0x502 in or before mjr_makeContext
+
+Mon Aug 14 14:06:51 2023
+WARNING: OpenGL error 0x502 in or before mjr_makeContext
+
+Mon Aug 14 14:07:07 2023
+WARNING: OpenGL error 0x502 in or before mjr_makeContext
+
+Mon Aug 14 14:07:30 2023
+WARNING: OpenGL error 0x502 in or before mjr_makeContext
+
+Mon Aug 14 14:11:30 2023
+WARNING: OpenGL error 0x502 in or before mjr_makeContext
+
+Mon Aug 14 14:17:40 2023
+WARNING: OpenGL error 0x502 in or before mjr_makeContext
+
+Mon Aug 14 14:18:21 2023
+WARNING: OpenGL error 0x502 in or before mjr_makeContext
+
+Mon Aug 14 14:18:42 2023
+WARNING: OpenGL error 0x502 in or before mjr_makeContext
+
+Mon Aug 14 14:18:58 2023
+WARNING: OpenGL error 0x502 in or before mjr_makeContext
+
+Mon Aug 14 14:19:54 2023
+WARNING: OpenGL error 0x502 in or before mjr_makeContext
+
+Mon Aug 14 14:20:00 2023
+WARNING: Nan, Inf or huge value in QACC at DOF 16. The simulation is unstable. Time = 6.1760.
+
+Mon Aug 14 14:20:09 2023
+WARNING: OpenGL error 0x502 in or before mjr_makeContext
+
+Mon Aug 14 14:20:47 2023
+WARNING: OpenGL error 0x502 in or before mjr_makeContext
+
+Mon Aug 14 14:21:14 2023
+WARNING: OpenGL error 0x502 in or before mjr_makeContext
+
+Mon Aug 14 14:21:26 2023
+WARNING: OpenGL error 0x502 in or before mjr_makeContext
+
+Mon Aug 14 14:21:40 2023
+WARNING: OpenGL error 0x502 in or before mjr_makeContext
+
+Mon Aug 14 14:21:42 2023
+WARNING: Nan, Inf or huge value in QACC at DOF 0. The simulation is unstable. Time = 1.9880.
+
+Mon Aug 14 14:21:53 2023
+WARNING: OpenGL error 0x502 in or before mjr_makeContext
+
+Mon Aug 14 14:21:57 2023
+WARNING: Nan, Inf or huge value in QACC at DOF 0. The simulation is unstable. Time = 4.1020.
+
+Mon Aug 14 14:21:57 2023
+ERROR: mjv_updateSceneState: m->nu changed
+
+Mon Aug 14 14:22:13 2023
+WARNING: OpenGL error 0x502 in or before mjr_makeContext
+
+Mon Aug 14 14:22:21 2023
+WARNING: Nan, Inf or huge value in QACC at DOF 0. The simulation is unstable. Time = 7.1580.
+
+Mon Aug 14 14:22:44 2023
+WARNING: OpenGL error 0x502 in or before mjr_makeContext
+
+Mon Aug 14 14:23:12 2023
+WARNING: OpenGL error 0x502 in or before mjr_makeContext
+
+Mon Aug 14 14:23:23 2023
+WARNING: OpenGL error 0x502 in or before mjr_makeContext
+
+Mon Aug 14 14:23:24 2023
+WARNING: Nan, Inf or huge value in QACC at DOF 16. The simulation is unstable. Time = 0.7560.
+
+Mon Aug 14 14:23:33 2023
+WARNING: OpenGL error 0x502 in or before mjr_makeContext
+
+Mon Aug 14 14:23:48 2023
+WARNING: OpenGL error 0x502 in or before mjr_makeContext
+
+Mon Aug 14 14:24:01 2023
+WARNING: OpenGL error 0x502 in or before mjr_makeContext
+
+Mon Aug 14 14:24:11 2023
+WARNING: Nan, Inf or huge value in QACC at DOF 16. The simulation is unstable. Time = 9.0920.
+
+Mon Aug 14 14:24:37 2023
+WARNING: OpenGL error 0x502 in or before mjr_makeContext
+
+Mon Aug 14 14:24:47 2023
+WARNING: Nan, Inf or huge value in QACC at DOF 16. The simulation is unstable. Time = 9.0920.
+
+Mon Aug 14 14:31:14 2023
+WARNING: OpenGL error 0x502 in or before mjr_makeContext
+
+Mon Aug 14 14:31:24 2023
+WARNING: Nan, Inf or huge value in QACC at DOF 16. The simulation is unstable. Time = 9.0920.
+
