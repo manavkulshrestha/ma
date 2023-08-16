@@ -250,3 +250,33 @@ WARNING: OpenGL error 0x502 in or before mjr_makeContext
 Mon Aug 14 14:31:24 2023
 WARNING: Nan, Inf or huge value in QACC at DOF 16. The simulation is unstable. Time = 9.0920.
 
+Wed Aug 16 11:53:18 2023
+WARNING: OpenGL error 0x502 in or before mjr_makeContext
+
+Wed Aug 16 11:53:29 2023
+WARNING: OpenGL error 0x502 in or before mjr_makeContext
+
+Wed Aug 16 11:53:55 2023
+WARNING: OpenGL error 0x502 in or before mjr_makeContext
+
+Wed Aug 16 11:55:03 2023
+WARNING: OpenGL error 0x502 in or before mjr_makeContext
+
+Wed Aug 16 12:08:26 2023
+WARNING: OpenGL error 0x502 in or before mjr_makeContext
+
+Wed Aug 16 12:26:51 2023
+WARNING: OpenGL error 0x502 in or before mjr_makeContext
+
+Wed Aug 16 12:27:13 2023
+WARNING: OpenGL error 0x502 in or before mjr_makeContext
+
+Wed Aug 16 12:27:29 2023
+WARNING: Nan, Inf or huge value in QACC at DOF 0. The simulation is unstable. Time = 15.0680.
+
+Wed Aug 16 12:30:08 2023
+WARNING: OpenGL error 0x502 in or before mjr_makeContext
+
+Wed Aug 16 13:14:40 2023
+WARNING: OpenGL error 0x502 in or before mjr_makeContext
+

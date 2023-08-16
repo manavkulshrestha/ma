@@ -13,16 +13,16 @@ with mujoco.viewer.launch_passive(m, d) as viewer:
     step_start = time.time()
 
     # policy
-    # d.ctrl = [0.1, 0.1, -0.05, 0.05, -0.1, -0.1]
-    d.ctrl = [0.11, 0.11, 0.1, -0.1, -0.09, -0.09]
+    d.ctrl = [0.11, 0.11]#, 0.1, -0.1, -0.09, -0.09]
+    print(d.xpos)
 
     # mj_step can be replaced with code that also evaluates
     # a policy and applies a control signal before stepping the physics.
     mujoco.mj_step(m, d)
-
+ 
     # Example modification of a viewer option: toggle contact points every two seconds.
-    with viewer.lock():
-      viewer.opt.flags[mujoco.mjtVisFlag.mjVIS_CONTACTPOINT] = int(d.time % 2)
+    # with viewer.lock():
+    #   viewer.opt.flags[mujoco.mjtVisFlag.mjVIS_CONTACTPOINT] = int(d.time % 2)
 
     # Pick up changes to the physics state, apply perturbations, update options from GUI.
     viewer.sync()
