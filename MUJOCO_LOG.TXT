@@ -280,3 +280,45 @@ WARNING: OpenGL error 0x502 in or before mjr_makeContext
 Wed Aug 16 13:14:40 2023
 WARNING: OpenGL error 0x502 in or before mjr_makeContext
 
+Fri Aug 18 14:45:00 2023
+WARNING: OpenGL error 0x502 in or before mjr_makeContext
+
+Fri Aug 18 14:45:39 2023
+WARNING: OpenGL error 0x502 in or before mjr_makeContext
+
+Fri Aug 18 14:45:50 2023
+WARNING: OpenGL error 0x502 in or before mjr_makeContext
+
+Fri Aug 18 14:46:26 2023
+WARNING: OpenGL error 0x502 in or before mjr_makeContext
+
+Fri Aug 18 14:46:54 2023
+WARNING: OpenGL error 0x502 in or before mjr_makeContext
+
+Fri Aug 18 14:48:05 2023
+WARNING: OpenGL error 0x502 in or before mjr_makeContext
+
+Fri Aug 18 14:50:14 2023
+WARNING: OpenGL error 0x502 in or before mjr_makeContext
+
+Fri Aug 18 14:50:32 2023
+WARNING: OpenGL error 0x502 in or before mjr_makeContext
+
+Fri Aug 18 14:50:37 2023
+WARNING: OpenGL error 0x502 in or before mjr_makeContext
+
+Fri Aug 18 14:50:55 2023
+WARNING: OpenGL error 0x502 in or before mjr_makeContext
+
+Fri Aug 18 14:51:17 2023
+WARNING: OpenGL error 0x502 in or before mjr_makeContext
+
+Fri Aug 18 15:00:29 2023
+WARNING: OpenGL error 0x502 in or before mjr_makeContext
+
+Fri Aug 18 15:01:24 2023
+WARNING: OpenGL error 0x502 in or before mjr_makeContext
+
+Fri Aug 18 15:01:56 2023
+WARNING: OpenGL error 0x502 in or before mjr_makeContext
+

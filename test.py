@@ -3,6 +3,12 @@ import time
 import mujoco
 import mujoco.viewer
 
+import numpy as np
+from scipy.spatial.transform import Rotation as R
+
+from utility import unit
+
+
 m = mujoco.MjModel.from_xml_path('./mjcf/main.xml')
 d = mujoco.MjData(m)
 
@@ -13,8 +19,13 @@ with mujoco.viewer.launch_passive(m, d) as viewer:
     step_start = time.time()
 
     # policy
-    d.ctrl = [0.11, 0.11]#, 0.1, -0.1, -0.09, -0.09]
-    print(d.xpos)
+    d.ctrl = [-0.1, 0.1]#, 0.1, -0.1, -0.09, -0.09]
+    q = d.body('robot').xquat
+    # zrad = 2*np.arccos(quat[0])
+    # print(np.degrees(zrad))
+
+    rv = R.from_quat(q).as_rotvec()
+    print(np.pi - np.linalg.norm(rv))
 
     # mj_step can be replaced with code that also evaluates
     # a policy and applies a control signal before stepping the physics.
@@ -31,3 +42,5 @@ with mujoco.viewer.launch_passive(m, d) as viewer:
     time_until_next_step = m.opt.timestep - (time.time() - step_start)
     if time_until_next_step > 0:
       time.sleep(time_until_next_step)
+
+    time.sleep(.01)
