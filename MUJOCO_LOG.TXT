@@ -322,3 +322,12 @@ WARNING: OpenGL error 0x502 in or before mjr_makeContext
 Fri Aug 18 15:01:56 2023
 WARNING: OpenGL error 0x502 in or before mjr_makeContext
 
+Wed Aug 30 11:27:24 2023
+ERROR: could not create window
+
+Wed Aug 30 11:27:58 2023
+ERROR: could not create window
+
+Wed Aug 30 16:14:40 2023
+ERROR: mjv_updateSceneState: m->nbody changed
+
