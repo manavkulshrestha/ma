@@ -1,7 +1,7 @@
 <?xml version="1.0" ?>
 <robot name="turtlebot3_burger">
   <mujoco> 
-	  <compiler meshdir="." balanceinertia="false" discardvisual="false"/>
+	  <compiler meshdir="." balanceinertia="false" discardvisual="false" fusestatic="false" inertiafromgeom="false"/>
   </mujoco>
 
   <link name="base_footprint"/>
@@ -21,12 +21,12 @@
       <material name="light_black"/>
     </visual>
 
-    <collision>
+    <!-- <collision>
       <origin xyz="-0.032 0 0.070" rpy="0 0 0"/>
       <geometry>
         <box size="0.140 0.140 0.143"/>
       </geometry>
-    </collision>
+    </collision> -->
 
     <inertial>
       <origin xyz="0 0 0" rpy="0 0 0"/>
@@ -53,12 +53,12 @@
       <material name="dark"/>
     </visual>
 
-    <collision>
+    <!-- <collision>
       <origin xyz="0 0 0" rpy="0 0 0"/>
       <geometry>
         <cylinder length="0.018" radius="0.033"/>
       </geometry>
-    </collision>
+    </collision> -->
 
     <inertial>
       <origin xyz="0 0 0" />
@@ -85,12 +85,12 @@
       <material name="dark"/>
     </visual>
 
-    <collision>
+    <!-- <collision>
       <origin xyz="0 0 0" rpy="0 0 0"/>
       <geometry>
         <cylinder length="0.018" radius="0.033"/>
       </geometry>
-    </collision>
+    </collision> -->
 
     <inertial>
       <origin xyz="0 0 0" />
@@ -147,12 +147,12 @@
       <material name="dark"/>
     </visual>
 
-    <collision>
+    <!-- <collision>
       <origin xyz="0.015 0 -0.0065" rpy="0 0 0"/>
       <geometry>
         <cylinder length="0.0315" radius="0.055"/>
       </geometry>
-    </collision>
+    </collision> -->
 
     <inertial>
       <mass value="0.114" />

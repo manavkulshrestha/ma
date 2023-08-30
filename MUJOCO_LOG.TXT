@@ -322,3 +322,75 @@ WARNING: OpenGL error 0x502 in or before mjr_makeContext
 Fri Aug 18 15:01:56 2023
 WARNING: OpenGL error 0x502 in or before mjr_makeContext
 
+Thu Aug 24 15:05:23 2023
+ERROR: could not create window
+
+Thu Aug 24 15:07:08 2023
+ERROR: could not create window
+
+Thu Aug 24 15:08:22 2023
+ERROR: could not create window
+
+Thu Aug 24 15:09:49 2023
+ERROR: could not create window
+
+Thu Aug 24 15:10:31 2023
+ERROR: could not create window
+
+Tue Aug 29 12:48:13 2023
+WARNING: Nan, Inf or huge value in QACC at DOF 3. The simulation is unstable. Time = 0.3280.
+
+Tue Aug 29 12:48:48 2023
+WARNING: Nan, Inf or huge value in QACC at DOF 0. The simulation is unstable. Time = 0.4040.
+
+Tue Aug 29 12:49:29 2023
+WARNING: Nan, Inf or huge value in QACC at DOF 0. The simulation is unstable. Time = 0.5480.
+
+Tue Aug 29 12:49:47 2023
+WARNING: Nan, Inf or huge value in QACC at DOF 0. The simulation is unstable. Time = 0.9180.
+
+Tue Aug 29 12:51:00 2023
+WARNING: Nan, Inf or huge value in QACC at DOF 0. The simulation is unstable. Time = 3.5380.
+
+Tue Aug 29 13:14:08 2023
+WARNING: Nan, Inf or huge value in QACC at DOF 0. The simulation is unstable. Time = 1.4120.
+
+Tue Aug 29 13:40:40 2023
+WARNING: Nan, Inf or huge value in QACC at DOF 3. The simulation is unstable. Time = 1.9740.
+
+Tue Aug 29 13:56:24 2023
+WARNING: Nan, Inf or huge value in QACC at DOF 1. The simulation is unstable. Time = 2.2160.
+
+Tue Aug 29 13:58:05 2023
+WARNING: Nan, Inf or huge value in QACC at DOF 0. The simulation is unstable. Time = 2.9400.
+
+Tue Aug 29 13:58:18 2023
+WARNING: Nan, Inf or huge value in QACC at DOF 0. The simulation is unstable. Time = 2.9400.
+
+Tue Aug 29 14:02:06 2023
+ERROR: mjv_updateSceneState: m->nu changed
+
+Tue Aug 29 14:02:58 2023
+ERROR: mjv_updateSceneState: m->nu changed
+
+Tue Aug 29 14:06:59 2023
+WARNING: Nan, Inf or huge value in QACC at DOF 3. The simulation is unstable. Time = 0.5340.
+
+Tue Aug 29 14:07:16 2023
+ERROR: mjv_updateSceneState: m->nu changed
+
+Tue Aug 29 14:35:36 2023
+ERROR: mjv_updateSceneState: m->nu changed
+
+Tue Aug 29 14:39:09 2023
+ERROR: mjv_updateSceneState: m->nu changed
+
+Tue Aug 29 15:32:06 2023
+ERROR: mjv_updateSceneState: m->nu changed
+
+Tue Aug 29 15:33:50 2023
+ERROR: mjv_updateSceneState: m->nu changed
+
+Tue Aug 29 15:41:27 2023
+ERROR: mjv_updateSceneState: m->nu changed
+
