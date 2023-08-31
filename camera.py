@@ -5,6 +5,11 @@ import mujoco.viewer
 import mujoco.renderer
 import mujoco.glfw
 
+import matplotlib.pyplot as plt
+
+# Debug flag
+debug = False
+
 # Creating OpenGL context
 ctx = mujoco.GLContext(1200, 900)
 ctx.make_current()
@@ -33,14 +38,15 @@ m = mujoco.MjModel.from_xml_string(xml)
 d = mujoco.MjData(m)
 r = mujoco.Renderer(m, 900, 1200)
 
+# Variable creation for MjvCamer (TODO: Learn how to use this)
 cam = mujoco.MjvCamera()
 opt = mujoco.MjvOption()
 scn = mujoco.MjvScene()
 con = mujoco.MjrContext()
 
-# mujoco.MjrRect
-
+# Variables for pixel debugging
 steps = 0
+img_n = 0
 
 # Launching the viewer
 with mujoco.viewer.launch_passive(m, d) as viewer:
@@ -50,14 +56,23 @@ with mujoco.viewer.launch_passive(m, d) as viewer:
 
   # Close the viewer automatically after 30 wall-seconds.
   start = time.time()
+
+
   while viewer.is_running() and time.time() - start < 30:
     step_start = time.time()
     # mj_step can be replaced with code that also evaluates
     # a policy and applies a control signal before stepping the physics.
     mujoco.mj_step(m, d)
 
-    r.update_scene(d)
-    # if steps < 200:
+
+    # Saving pixels to make sure sensor is working correctly
+    r.update_scene(d, cam)
+    if steps > 20 and debug:
+      pixels = r.render()
+      plt.imsave(f"./{img_n}.png", pixels)
+      steps = 0
+      img_n += 1
+    steps += 1
       
     # pixels = r.render()
     # print(pixels)
