@@ -8,16 +8,11 @@ import open3d as o3d
 import math
 import matplotlib.image as mpimg
 
-
 # Creating OpenGL context
 ctx = mujoco.GLContext(1200, 900)
 ctx.make_current()
 
-# Creating xml mujoco object with a camera
-# <camera name="camera" pos="0 0 0.12" zaxis="0 1 0" mode="fixed" fovy="60" />
-#<joint name="free" type="free" axis="0 0 0" pos="0 0.2 0"/>
-#            <geom type="sphere" size="0.1" rgba="0 0 1 1"/>
-
+# Xml mujoco object with a camera
 xml=""" 
 <mujoco>
     <worldbody>
@@ -30,7 +25,7 @@ xml="""
         <body name="robot" pos="0 0 1">
             <joint name="free" type="free" axis="0 0 0" pos="0 0.2 0"/>
             <geom type="sphere" size="0.1" rgba="0 0 1 1"/>
-            <camera name="camera" pos="0 0 1" zaxis="0 0 1" mode="fixed" fovy="60" />
+            <camera name="camera" pos="0 0 0.5" zaxis="0 0 1" mode="fixed" fovy="60" />
 
         </body>
 
@@ -45,60 +40,43 @@ xml="""
 </mujoco>
 """
 
-
 # Creating a model from the xml and testing diferent cameras
 
 m = mujoco.MjModel.from_xml_string(xml)
-d = mujoco.MjData(m)
-r = mujoco.Renderer(m, 900, 1200)
+data = mujoco.MjData(m)
+r = mujoco.Renderer(m, 640, 480) # RGB = 1080 x 1920  default =  900, 1200   Depth =  640 x 480
 cam = mujoco.MjvCamera()
 opt = mujoco.MjvOption()
-scn = mujoco.MjvScene()
-con = mujoco.MjrContext()
 
 
 steps = 0
-
+n_frames = 10
+frame = 0
+depth = 0
 # Launching the viewer
-n_frames = 60
-with mujoco.viewer.launch_passive(m, d) as viewer:
-
-  # Setting the camera
-
-  print(type(m.cam("camera")))
-  print(type(viewer.cam))
-
-  # Close the viewer automatically after 30 wall-seconds.
+with mujoco.viewer.launch_passive(m, data) as viewer:
+  
+  # Simulation time
+  start_sim = data.time
+  # Real time
   start = time.time()
-
-  while viewer.is_running() and time.time() - start < 30:
-  #for i in range(n_frames):
+  
+  while viewer.is_running() and time.time() - start < 20:
 
     step_start = time.time()
 
-    
-    #model = mujoco.MjModel.from_xml_string(xml)
-    #sim = mp.MjSim(model)
 
-    ## a is a tuple if depth is True and a numpy array if depth is False ##
-    #a = sim.render(width=200, height=200, camera_name='camera', depth=True)
-    #rgb_img = a[0]
-    #depth_img = a[1]
-    #print(rgb_img)
-
-    # mj_step can be replaced with code that also evaluates
-
+    mujoco.mj_step(m, data)
 
     # a policy and applies a control signal before stepping the physics.
-
-    mujoco.mj_step(m, d)
-
     # update renderer to render depth
     r.enable_depth_rendering()
-    # reset the scene
-    r.update_scene(d, camera="camera")
+      # reset the scene
+    r.update_scene(data, camera="camera")
     
     # depth is a float array, in meters.
+    pixels_dis = r.render()
+
     depth = r.render()
     # Scale by 2 mean distances of near rays.
     depth -= depth.min()
@@ -106,28 +84,28 @@ with mujoco.viewer.launch_passive(m, d) as viewer:
     # regla de 3 simple
     pixels = 255*np.clip(depth, 0, 1)
     # To use as an image
-    pixels = pixels.astype(np.uint8)
+    pixels_depth = pixels.astype(np.uint8)
 
-
-    #r = r._depth_rendering
-
-    # if steps < 200:
-    #pixels = r.render()
-    print(pixels)
-    
-    #plt.imshow(pixels)
-    #plt.savefig('myimg.png', pixels)
+    print(pixels_dis)
+    print(pixels_depth)
     
 
+    if data.time - start_sim > 0.092: # makes 33 frames
     
-    mpimg.imsave(f'myimg_1.png', pixels, cmap='gray')
-    time.sleep(2) 
+      frame = frame +1
+      start_sim = data.time
+
+      #start = time.time()
+      mpimg.imsave(f'myimg_{frame}.png', pixels_depth, cmap='gray')
+
+      #time.sleep(2) 
 
     # Example modification of a viewer option: toggle contact points every two seconds.
 
     with viewer.lock():
 
-      viewer.opt.flags[mujoco.mjtVisFlag.mjVIS_CONTACTPOINT] = int(d.time % 2)
+      # enable contact visualization option:
+      viewer.opt.flags[mujoco.mjtVisFlag.mjVIS_CONTACTPOINT] = int(data.time % 2)
 
     # Pick up changes to the physics state, apply perturbations, update options from GUI.
 
@@ -136,14 +114,12 @@ with mujoco.viewer.launch_passive(m, d) as viewer:
     # Rudimentary time keeping, will drift relative to wall clock.
 
     time_until_next_step = m.opt.timestep - (time.time() - step_start)
-    #plt.imshow(pixels)
     
     if time_until_next_step > 0:
 
       time.sleep(time_until_next_step)
 
     time.sleep(.01)
-    #plt.show()
 # Freeing the context
 
 r.disable_depth_rendering()
