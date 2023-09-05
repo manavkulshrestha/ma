@@ -11,7 +11,7 @@ from controller import Controller
 from human import Human
 
 # notes: rolling friction may be too low, maybe should be velocity servo
-
+# brownion motion and repulsion field for agent movement
 
 def main():
   m = mj.MjModel.from_xml_path('./mjcf/main.xml')
