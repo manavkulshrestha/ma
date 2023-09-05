@@ -8,6 +8,7 @@ from scipy.spatial.transform import Rotation as R
 
 from utility import unit
 from controller import Controller
+from human import Human
 
 # notes: rolling friction may be too low, maybe should be velocity servo
 
@@ -17,6 +18,7 @@ def main():
   d = mj.MjData(m)
 
   controller = Controller('robot', target=(-1, -1, 0), data=d, ksp=1, ksd=100)
+  human = Human('human', model=m)
 
   with mujoco.viewer.launch_passive(m, d) as viewer:
     # Close the viewer automatically after 30 wall-seconds.
@@ -28,13 +30,14 @@ def main():
       # policy
       # d.ctrl = [0.01, -0.01]
       # print(controller.get_orn2D())
-      d.ctrl = controller.get_control(scale=0.01)
-      print(f' {d.ctrl}')
+      # d.ctrl = controller.get_control(scale=0.01)
+      # print(f' {d.ctrl}')
       # print(f'{d.ctrl} at {np.around(controller.get_pos(), 3)}')
       # print(f'{controller.e_curr:.3f} {d.ctrl}')
 
       # mj_step can be replaced with code that also evaluates
       # a policy and applies a contro l signal before stepping the physics.
+      human.wander()
       mujoco.mj_step(m, d)
   
       # Example modification of a viewer option: toggle contact points every two seconds.
