@@ -39,9 +39,14 @@ xml = """
 # ------- MODEL AND DATA CREATION ---------
 m = mujoco.MjModel.from_xml_string(xml)
 d = mujoco.MjData(m)
-r_rgb = mujoco.Renderer(m, 900, 1200)
-r_depth = mujoco.Renderer(m, 900, 1200)
+r_rgb = mujoco.Renderer(m, 480, 640)
+
+r_depth = mujoco.Renderer(m, 480, 640)
 r_depth.enable_depth_rendering()
+
+r_seg = mujoco.Renderer(m, 480, 640)
+r_seg.enable_segmentation_rendering()
+
 s = sensors.Sensors()
 
 
@@ -97,7 +102,9 @@ with mujoco.viewer.launch_passive(m, d) as viewer:
 
     # ------ Debug Code for Video Saving ------
     n_frames += 1
-    pixels = s.get_rgbd_image_matrices(m, d, r_rgb, r_depth)
+    pixels = s.get_rgbd_seg_matrices(m, d, r_rgb, r_depth, r_seg)
+    print(pixels[0].shape)
+    print(pixels[0])
     for i in range(n_cameras):
       videos[i].append(pixels[i][:, :, :3])
 
