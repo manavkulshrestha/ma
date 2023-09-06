@@ -1,5 +1,4 @@
 import time
-
 import mujoco
 import mujoco.viewer
 import mujoco.renderer
@@ -15,10 +14,6 @@ import mediapy as media
 debug = False
 test_name = "camera_depth"
 
-
-# ------- Creating OpenGL context --------
-ctx = mujoco.GLContext(1200, 900)
-ctx.make_current()
 
 
 # ------------ XML DEFINITION ------------
@@ -61,6 +56,11 @@ def save_image(name, pixels, renderer):
 # ----- Variables for video creation -------
 n_cameras = m.cam_user.shape[0]
 videos = [[] for _ in range(n_cameras)]
+duration = 5
+fps = 30
+n_frames = 1
+# Set the model timestep to match the video framerate.
+m.opt.timestep = 1 / fps
 
 
 # Launching the viewer
@@ -71,7 +71,7 @@ with mujoco.viewer.launch_passive(m, d) as viewer:
   start = time.time()
 
 
-  while viewer.is_running() and time.time() - start < 10:
+  while viewer.is_running() and n_frames < duration * fps:
 
     step_start = time.time()
 
@@ -96,14 +96,10 @@ with mujoco.viewer.launch_passive(m, d) as viewer:
     
 
     # ------ Debug Code for Video Saving ------
+    n_frames += 1
     pixels = s.get_rgbd_image_matrices(m, d, r_rgb, r_depth)
     for i in range(n_cameras):
       videos[i].append(pixels[i][:, :, :3])
-
-
-    # Example modification of a viewer option: toggle contact points every two seconds.
-    with viewer.lock():
-      viewer.opt.flags[mujoco.mjtVisFlag.mjVIS_CONTACTPOINT] = int(d.time % 2)
 
 
     # Pick up changes to the physics state, apply perturbations, update options from GUI.
@@ -111,17 +107,17 @@ with mujoco.viewer.launch_passive(m, d) as viewer:
 
 
     # Rudimentary time keeping, will drift relative to wall clock.
-    time_until_next_step = m.opt.timestep - (time.time() - step_start)
+    time_until_next_step = abs(m.opt.timestep - (time.time() - step_start))
+
+    current_time = time.time() - start
+    while d.time < current_time:
+      mujoco.mj_step(m, d)
+
     if time_until_next_step > 0:
       time.sleep(time_until_next_step)
 
 
-    time.sleep(.01)
-
 # Saving the videos
+print("Saving videos...")
 for i in range(n_cameras):
-  media.write_video("video_cam_" + str(i) + ".mp4", videos[i], fps=30)
-
-
-# Freeing the context
-ctx.free()
+  media.write_video("video_cam_" + str(i) + ".mp4", videos[i], fps=fps)
