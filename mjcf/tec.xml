@@ -28,10 +28,12 @@
     <!-- robot -->
     <body name="robot1">
       <freejoint/>
-      <body name="base_link1" pos="0 -0.2 0.01">
+      <body name="base_link1" pos="0 -0.02 0.01">
       
         <inertial pos="0 0 0" quat="0.994532 -0.0072214 -0.0815456 -0.0648458" mass="0.825735" diaginertia="0.00221987 0.00211778 0.00200059"/>
         <geom pos="-0.032 0 0" type="mesh" mesh="burger_base"/>
+        <camera name="camera" pos="-0.01 0 0.195" xyaxes="0 -0.5 0 -0.01 0 2" mode="fixed" fovy="60" />
+
 
         <body name="wheel_left_link1" pos="0 0.08 0.023" quat="0.707388 -0.706825 0 0">
           <inertial pos="0 0 0" quat="-0.000890159 0.706886 0.000889646 0.707326" mass="0.0284989" diaginertia="2.07126e-05 1.11924e-05 1.11756e-05"/>
@@ -66,6 +68,8 @@
       
         <inertial pos="0 0 0" quat="0.994532 -0.0072214 -0.0815456 -0.0648458" mass="0.825735" diaginertia="0.00221987 0.00211778 0.00200059"/>
         <geom pos="-0.032 0 0" type="mesh" mesh="burger_base"/>
+        <camera name="camera2" pos="-0.01 0 0.195" xyaxes="0 -0.5 0 -0.01 0 2" mode="fixed" fovy="60" />
+
 
         <body name="wheel_left_link2" pos="0 0.08 0.023" quat="0.707388 -0.706825 0 0">
           <inertial pos="0 0 0" quat="-0.000890159 0.706886 0.000889646 0.707326" mass="0.0284989" diaginertia="2.07126e-05 1.11924e-05 1.11756e-05"/>
