@@ -13,12 +13,15 @@ from human import Human
 # notes: rolling friction may be too low, maybe should be velocity servo
 # brownion motion and repulsion field for agent movement
 
-def main():
-  m = mj.MjModel.from_xml_path('./mjcf/main.xml')
-  d = mj.MjData(m)
 
-  controller = Controller('robot', target=(-1, -1, 0), data=d, ksp=1, ksd=100)
-  human = Human('human', model=m)
+def move_simple(name, *, t, func, axis=-1, model):
+  model.site(name).pos[axis] = func(t)
+
+
+def main():
+  m = mj.MjModel.from_xml_path('./mjcf/tec.xml')
+  d = mj.MjData(m)
+  t = 0
 
   with mujoco.viewer.launch_passive(m, d) as viewer:
     # Close the viewer automatically after 30 wall-seconds.
@@ -28,22 +31,15 @@ def main():
       step_start = time.time()
 
       # policy
-      # d.ctrl = [0.01, -0.01]
-      # print(controller.get_orn2D())
-      # d.ctrl = controller.get_control(scale=0.01)
-      # print(f' {d.ctrl}')
-      # print(f'{d.ctrl} at {np.around(controller.get_pos(), 3)}')
-      # print(f'{controller.e_curr:.3f} {d.ctrl}')
-
       # mj_step can be replaced with code that also evaluates
       # a policy and applies a contro l signal before stepping the physics.
-      human.wander()
-      mujoco.mj_step(m, d)
-  
-      # Example modification of a viewer option: toggle contact points every two seconds.
-      # with viewer.lock():
-      #   viewer.opt.flags[mujoco.mjtVisFlag.mjVIS_CONTACTPOINT] = int(d.time % 2)
 
+      move_simple('human1', t=t, func=lambda x: (np.sin(x)+1)/2 * 0.2 + 0.05, axis=-1, model=m)
+      move_simple('human2', t=t, func=lambda x: (np.sin(x*2)+1)/2 * 0.2 + 0.05, axis=-1, model=m)
+      move_simple('human3', t=t, func=lambda x: (np.sin(x*3)+1)/2 * 0.2 + 0.05, axis=-1, model=m)
+      mujoco.mj_step(m, d)
+      t += 0.1
+  
       # Pick up changes to the physics state, apply perturbations, update options from GUI.
       viewer.sync()
 
