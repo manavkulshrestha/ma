@@ -13,11 +13,13 @@
             "justMyCode": true
         },
         {
-            "name": "Python: Module",
+            "name": "Python: Mutli-Agent Main",
             "type": "python",
             "request": "launch",
-            "module": "enter-your-module-name",
+            "program": "${workspaceFolder}/main.py",
+            "console": "integratedTerminal",
             "justMyCode": true
-        }
+        },
+        
     ]
 }

@@ -1,46 +1,18 @@
-import time
-
-import mujoco
-import mujoco.viewer
-
 import numpy as np
-from scipy.spatial.transform import Rotation as R
-
-from utility import unit
 
 
-m = mujoco.MjModel.from_xml_path('./mjcf/main.xml')
-d = mujoco.MjData(m)
+def signed_rad(rad):
+    rad = rad % (2*np.pi)
 
-with mujoco.viewer.launch_passive(m, d) as viewer:
-  # Close the viewer automatically after 30 wall-seconds.
-  start = time.time()
-  while viewer.is_running() and time.time() - start < 30:
-    step_start = time.time()
+    if rad > np.pi:
+        return rad - 2*np.pi
+    
+    return rad
 
-    # policy
-    d.ctrl = [-0.1, 0.1]#, 0.1, -0.1, -0.09, -0.09]
-    q = d.body('robot').xquat
-    # zrad = 2*np.arccos(quat[0])
-    # print(np.degrees(zrad))
 
-    rv = R.from_quat(q).as_rotvec()
-    print(np.pi - np.linalg.norm(rv))
+def main():
+    print(signed_rad(1.9*np.pi))
 
-    # mj_step can be replaced with code that also evaluates
-    # a policy and applies a control signal before stepping the physics.
-    mujoco.mj_step(m, d)
- 
-    # Example modification of a viewer option: toggle contact points every two seconds.
-    # with viewer.lock():
-    #   viewer.opt.flags[mujoco.mjtVisFlag.mjVIS_CONTACTPOINT] = int(d.time % 2)
 
-    # Pick up changes to the physics state, apply perturbations, update options from GUI.
-    viewer.sync()
-
-    # Rudimentary time keeping, will drift relative to wall clock.
-    time_until_next_step = m.opt.timestep - (time.time() - step_start)
-    if time_until_next_step > 0:
-      time.sleep(time_until_next_step)
-
-    time.sleep(.01)
+if __name__ == '__main__':
+    main()
