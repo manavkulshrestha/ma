@@ -36,7 +36,10 @@ def main():
 
   # Create a recorder for data collection
   sensor = Sensors()
-  recorder = Recorder(duration=10, fps=30, n_cameras=m.cam_user.shape[0], folder="./")
+  recorder = Recorder(duration=2, 
+                      fps=30, 
+                      n_cameras=m.cam_user.shape[0], 
+                      folder="./")
 
 
   with mujoco.viewer.launch_passive(m, d) as viewer:
