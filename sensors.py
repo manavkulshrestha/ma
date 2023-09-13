@@ -117,7 +117,7 @@ class Sensors:
                     # Add a dimension to the depth image to make it 3D
                     depth = np.expand_dims(r_depth.render(), axis=2)
                     # Limit the depth values to be between 0.3 and 4.0
-                    depth[depth < 0.3] = np.nan
+                    depth[depth < 0.01] = np.nan
                     depth[depth > 4.0] = np.nan
 
                     # Add a dimension to the segmentation image to make it 3D
