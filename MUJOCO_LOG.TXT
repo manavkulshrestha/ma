@@ -394,3 +394,27 @@ ERROR: mjv_updateSceneState: m->nu changed
 Tue Aug 29 15:41:27 2023
 ERROR: mjv_updateSceneState: m->nu changed
 
+Thu Sep  7 14:50:07 2023
+ERROR: mjv_updateSceneState: m->nu changed
+
+Thu Sep  7 14:51:20 2023
+ERROR: mjv_updateSceneState: m->nu changed
+
+Thu Sep  7 14:53:05 2023
+ERROR: mjv_updateSceneState: m->nu changed
+
+Thu Sep  7 14:57:56 2023
+WARNING: Nan, Inf or huge value in QACC at DOF 6. The simulation is unstable. Time = 0.0100.
+
+Thu Sep  7 14:58:21 2023
+WARNING: Nan, Inf or huge value in QACC at DOF 6. The simulation is unstable. Time = 0.0100.
+
+Thu Sep  7 14:58:31 2023
+WARNING: Nan, Inf or huge value in QACC at DOF 6. The simulation is unstable. Time = 0.0140.
+
+Thu Sep  7 14:59:29 2023
+WARNING: Nan, Inf or huge value in QACC at DOF 6. The simulation is unstable. Time = 0.0140.
+
+Thu Sep  7 15:10:28 2023
+WARNING: Nan, Inf or huge value in QACC at DOF 6. The simulation is unstable. Time = 0.0140.
+
