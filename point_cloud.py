@@ -123,8 +123,6 @@ class PointCloud:
                 # Adding the point to the list of points
                 points.append(point)
 
-        points.append(camera_pos)
-
         return points
 
 
