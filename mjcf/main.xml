@@ -20,16 +20,24 @@
     <light cutoff="100" diffuse="1 1 1" dir="0 0 -1.3" directional="true" exponent="1" pos="0 0 1.3" specular="0.1 0.1 0.1"/>
 	  <geom name="floor" type="plane" size="100 100 .2" material="grid" friction="0 0.005 0.0001"/>
     
-    <!-- human agent -->
-    <body name="human">
+    <!-- human agents -->
+    <site name="site_object" pos="-0.2 0 0.05" size="0.05" type="sphere" rgba="1 1 0 1"/>
+    <geom name="geom_object" pos="0.2 0 0.05" size="0.05" type="sphere" rgba="1 1 0 1"/>
+
+    <body name="body_object" pos="0 0.2 0.05">
       <freejoint/>
-      <geom name="human_shape" pos="0.2 0 0.05" size="0.05" type="sphere" rgba="1 1 0 1"/>
+      <geom name="body_object_geom" pos="0.2 0 0.05" size="0.05" type="sphere" rgba="1 1 0 1"/>
     </body>
 
+    <!-- <body name="body_object" pos="0 0 0">
+      </freejoint>
+      <geom name="human" pos="0 0.2 0.05" type="sphere" size="0.05" rgba="1 1 0 1"/>
+    </body> -->
+
     <!-- robot -->
-    <body name="robot">
+    <body name="robot0" pos="0 0 0.01">
       <freejoint/>
-      <body name="base_link" pos="0 0 0.01">
+      <body name="base_link" pos="0 0 0">
       
         <inertial pos="0 0 0" quat="0.994532 -0.0072214 -0.0815456 -0.0648458" mass="0.825735" diaginertia="0.00221987 0.00211778 0.00200059"/>
         <geom pos="-0.032 0 0" type="mesh" mesh="burger_base"/>

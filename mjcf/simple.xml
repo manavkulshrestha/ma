@@ -1,0 +1,36 @@
+<mujoco model="turtlebot3_burger">
+  <compiler angle="radian" meshdir="./robot/" autolimits="true"/>
+  <statistic meansize="0.0563245" extent="0.284544" center="-0.0314095 -1.28119e-06 0.0998247"/>
+
+  <asset>
+    <!-- sky and plane -->
+    <texture type="skybox" builtin="gradient" width="2048" height="2048"/>
+    <texture name="grid" type="2d" builtin="checker" width="512" height="512" rgb1=".1 .2 .3" rgb2=".2 .3 .4"/>
+    <material name="grid" texture="grid" texrepeat="1 1" texuniform="true" reflectance=".2"/>
+  </asset>
+
+  <worldbody>
+    <!-- sky and plane -->
+    <light cutoff="100" diffuse="1 1 1" dir="0 0 -1.3" directional="true" exponent="1" pos="0 0 1.3" specular="0.1 0.1 0.1"/>
+	  <geom name="floor" type="plane" size="100 100 .2" material="grid" friction="0 0.005 0.0001"/>
+    
+    <!-- human agents -->
+    <site name="human0" pos="<HPOS0>" size="0.05" type="sphere" rgba="1 1 0 1"/>
+    <site name="human1" pos="<HPOS1>" size="0.05" type="sphere" rgba="1 1 0 1"/>
+    <site name="human2" pos="<HPOS2>" size="0.05" type="sphere" rgba="1 1 0 1"/>
+    <site name="human3" pos="<HPOS3>" size="0.05" type="sphere" rgba="1 1 0 1"/>
+    <site name="human4" pos="<HPOS4>" size="0.05" type="sphere" rgba="1 1 0 1"/>
+
+    <!-- robot -->
+    <site name="robot0" pos="<RPOS0>" size="0.05" type="sphere" rgba="1 0 0 1"/>
+    <site name="robot1" pos="<RPOS1>" size="0.05" type="sphere" rgba="1 0 0 1"/>
+    <site name="robot2" pos="<RPOS2>" size="0.05" type="sphere" rgba="1 0 0 1"/>
+    <site name="robot3" pos="<RPOS3>" size="0.05" type="sphere" rgba="1 0 0 1"/>
+    <site name="robot4" pos="<RPOS4>" size="0.05" type="sphere" rgba="1 0 0 1"/>
+
+    <!-- goal -->
+    <site name="goal0" pos="1.3 1.3 0" size="0.3" type="sphere" rgba="0 1 0 0.2"/>
+    <site name="goal1" pos="-1.3 -1.3 0" size="0.3" type="sphere" rgba="0 1 0 0.2"/>
+
+  </worldbody>
+</mujoco>

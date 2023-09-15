@@ -22,3 +22,6 @@ def signed_rad(rad):
         return rad - 2*np.pi
     
     return rad
+
+def robot_pos(name, data, dim=3):
+    return data.site(name).pos[:dim]

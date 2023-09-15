@@ -418,3 +418,6 @@ WARNING: Nan, Inf or huge value in QACC at DOF 6. The simulation is unstable. Ti
 Thu Sep  7 15:10:28 2023
 WARNING: Nan, Inf or huge value in QACC at DOF 6. The simulation is unstable. Time = 0.0140.
 
+Fri Sep 15 17:37:23 2023
+ERROR: mjv_updateSceneState: m->nbody changed
+
