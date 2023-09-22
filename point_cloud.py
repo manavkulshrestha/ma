@@ -2,7 +2,6 @@ import numpy as np
 import math
 
 
-
 class PointCloud:
     def __init__(self, shape, fovy, downsample=5) -> None:
         """
@@ -33,7 +32,9 @@ class PointCloud:
 
         Parameters
         ----------
+        name : Name of an object it detects
         points : A list of points in the world frame.
+        
         """
 
         # Obtaining the average for each axis
@@ -56,17 +57,25 @@ class PointCloud:
 
         return feature_vector
     
-    def avg_feature_vector_seg (avg_feature_vectors):
+    def avg_feature_vector_seg (self, avg_feature_vectors):
+        """
+        Returns a weighted average feature vector for a given set of points.
 
+        Parameters
+        ----------
+        avg_feature_vectors : A list of coordinates from the world frame.
+        """
+
+        # Feature vectors as a numpy array
         avg_feature_vectors = np.array(avg_feature_vectors)
 
+        # Calculate the weight average of feature vectors
         x = np.average(avg_feature_vectors[:,0], weights=avg_feature_vectors[:,4])
         y = np.average(avg_feature_vectors[:,1], weights=avg_feature_vectors[:,4])
         z = np.average(avg_feature_vectors[:,2], weights=avg_feature_vectors[:,4])
         total_weight = np.sum(avg_feature_vectors[:,4])
         
         return np.array([x, y, z, 0, total_weight])
-
 
     
     def get_feature_vector(self, name, points):
@@ -75,6 +84,7 @@ class PointCloud:
 
         Parameters
         ----------
+        name : Name of an object it detects
         points : A list of points in the world frame.
         """
 
@@ -97,7 +107,6 @@ class PointCloud:
         #print(feature_vector)
 
         return feature_vector
-
 
 
     def get_feature_vectors(self, 
@@ -137,7 +146,6 @@ class PointCloud:
 
         return feature_vectors
 
-
     
     def get_segmented_map(self, frames, segments, poses, rotations, m):
         """
@@ -154,16 +162,12 @@ class PointCloud:
 
         # Creating a list of points in the world frame
         segmented_point_cloud = {}
-        point_individual = {}
-        point_individual_pc = {}
-        nop = 0
 
         # Iterating through each frame
         for i in range(len(frames)):
 
             # Getting the points in the world frame
             segment_points = self.get_segmented_points(frames[i], segments[i], poses[i], rotations[i])
-            #point_individual[i] = self.get_segmented_points(frames[i], segments[i], poses[i], rotations[i])
 
             # Adding the list of points to the segmented point cloud list
             for key in segment_points.keys():
@@ -176,10 +180,8 @@ class PointCloud:
                 if (m.geom(int(key)).bodyid[0] == 0):
                     try:
                         segmented_point_cloud[m.geom(int(key)).name].extend(segment_points[key])
-                        #point_individual_pc[[m.geom(int(key)).name]].extend(point_individual[i][key])
                     except:
                         segmented_point_cloud[m.geom(int(key)).name] = segment_points[key]
-                        #point_individual_pc[m.geom(int(key)).name] = point_individual[i][key]
                     continue
 
                 # Saving geoms that are part of a body
@@ -191,68 +193,14 @@ class PointCloud:
                 name = m.body(body_id).name
                 try:
                     segmented_point_cloud[name].extend(segment_points[key])
-                    #point_individual_pc[name].extend(point_individual[i][key])
                 except:
                     segmented_point_cloud[name] = segment_points[key]
-                    #point_individual_pc[name] = point_individual[i][key]
-            
-            #for key in segment_points.keys():
-            #    segment_points[key]
-            #    nop += 1
-            #print(nop)
-                
+
 
         return segmented_point_cloud
-    
-    def get_feature_avgweig_vectors(
-                            self, 
-                            frames=None, 
-                            segments=None, 
-                            poses=None, 
-                            rotations=None, 
-                            m=None, 
-                            segmented_map=None):
-        """
-        Returns a set of feature vectors for each agent in the map
-
-        Parameters
-        ----------
-        frames : A list of depth frames from the camera.
-        segments : A list of segmentation frames from the camera.
-        poses : A list of camera poses in the world frame.
-        rotations : A list of camera rotations in the world frame.
-        m : The mujoco model.
-        """
-
-        if segmented_map is None:
-            # Getting the segmented map
-            segmented_map = self.get_segmented_map(frames, segments, poses, rotations, m)
-
-        # Creating a list of feature vectors
-        feature_vectors = {}
-        feature_vectors_avg = {}
-
-        # Iterating through each segmented object
-        for key in segmented_map.keys():
-            for i in range(len(segmented_map[key])):
-                                    
-                # Getting the feature vector
-                    #feature_vector = self.get_feature_vector(key, np.array(segmented_map[name][key]))
-                    j = 2
-                    if segmented_map[key] != 'robot2':
-
-                        print(segmented_map[j])
-                    #feature_vectors_avg[key].append(feature_vector)
-
-                # Adding the feature vector to the list
-                #feature_vectors[key] = feature_vector
-
-        return feature_vectors_avg
 
 
-
-
-    def get_segmented_weigavg_map(self, frames, segments, poses, rotations, m):
+    def get_segmented_weightavg_feature_vector(self, frames, segments, poses, rotations, m):
         """
         Returns a set of feature vectors for each agent in the map
 
@@ -266,9 +214,9 @@ class PointCloud:
         """
 
         # Creating a list of points in the world frame
-        segmented_point_cloud = {}
-        segmented_pc_f = {}
-        point_individual = {}
+        segmented_point_cloud_vector = {}
+        segmented_pc_feat_vec = {}
+        segmented_point_cloud_percam = {}
         feature_vec_weigh_avg = {}
 
 
@@ -276,21 +224,21 @@ class PointCloud:
         for i in range(len(frames)):
 
             # Getting the points in the world frame
-            point_individual = self.get_segmented_points(frames[i], segments[i], poses[i], rotations[i])
+            segmented_point_cloud_percam = self.get_segmented_points(frames[i], segments[i], poses[i], rotations[i])
 
             # Adding the list of points to the segmented point cloud list
-            for key in point_individual.keys():
+            for key in segmented_point_cloud_percam.keys():
 
                  # Ignoring floor and world body
                 if key == -1 or key == 0:
                     continue
 
-                # Saving feature vectors of pure geoms
+                # Saving feature vectors of pure geoms from a camera
                 if (m.geom(int(key)).bodyid[0] == 0):
                     try:
-                        segmented_point_cloud[m.geom(int(key)).name].append(self.get_feature_seg_vector(m.geom(int(key)).name, np.array(point_individual[key])))
+                        segmented_point_cloud_vector[m.geom(int(key)).name].append(self.get_feature_seg_vector(m.geom(int(key)).name, np.array(segmented_point_cloud_percam[key])))
                     except:
-                        segmented_point_cloud[m.geom(int(key)).name] = [self.get_feature_seg_vector(m.geom(int(key)).name, np.array(point_individual[key]))]
+                        segmented_point_cloud_vector[m.geom(int(key)).name] = [self.get_feature_seg_vector(m.geom(int(key)).name, np.array(segmented_point_cloud_percam[key]))]
 
                     continue
 
@@ -301,27 +249,28 @@ class PointCloud:
                 
                 # Listing feature vectors that belong to a single body
                 name = m.body(body_id).name
+                
+                # Storing the feature vectors corresponding the body and part of it
                 try:
-                    segmented_point_cloud[name].append(self.get_feature_seg_vector(name, np.array(point_individual[key])))
+                    segmented_point_cloud_vector[name].append(self.get_feature_seg_vector(name, np.array(segmented_point_cloud_percam[key])))
 
                 except:
-                    segmented_point_cloud[name] = [self.get_feature_seg_vector(name, np.array(point_individual[key]))]
+                    segmented_point_cloud_vector[name] = [self.get_feature_seg_vector(name, np.array(segmented_point_cloud_percam[key]))]
 
 
             # Getting weighted average of each feature vectors in a given frame
-            for key in segmented_point_cloud.keys():
+            for key in segmented_point_cloud_vector.keys():
                 try:
-                    segmented_pc_f[key].append(self.avg_feature_vector_seg(segmented_point_cloud[key]))
+                    segmented_pc_feat_vec[key].append(self.avg_feature_vector_seg(segmented_point_cloud_vector[key]))
                 except:
-                    segmented_pc_f[key] = [self.avg_feature_vector_seg(segmented_point_cloud[key])]
+                    segmented_pc_feat_vec[key] = [self.avg_feature_vector_seg(segmented_point_cloud_vector[key])]
 
         
         # Getting final weighted average of each feature vectors from all frames
-        for key in segmented_pc_f.keys():
-            feature_vec_weigh_avg[key] = self.avg_feature_vector_seg(segmented_pc_f[key])
+        for key in segmented_pc_feat_vec.keys():
+            feature_vec_weigh_avg[key] = self.avg_feature_vector_seg(segmented_pc_feat_vec[key])
 
         return feature_vec_weigh_avg
-                    
 
 
     def get_map(self, frames, poses, rotations):
@@ -351,7 +300,6 @@ class PointCloud:
             point_cloud.extend(points)
 
         return np.array(point_cloud)
-
 
 
     def get_points(self, depth_frame, camera_pos, z_angle):
@@ -423,7 +371,6 @@ class PointCloud:
         return points
     
 
-
     def get_segmented_points(self, depth_frame, segment_frame, camera_pos, z_angle):
         """
         Returns a list of points in the world frame from a depth frame and camera pose.
@@ -494,7 +441,6 @@ class PointCloud:
 
 
         return segment_points
-
 
 
     def get_voxels(self, camera_frame, camera_pose):
