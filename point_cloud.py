@@ -56,34 +56,16 @@ class PointCloud:
 
         return feature_vector
     
-    def avg_feature_vector_seg (self, mat_avg):
-        
-        x = []
-        y = []
-        z = []
-        b = []
-        amount = []
-        weighted_avg = []
-        feature_vec_weigh_avg = {}
-        
-        for key in mat_avg.keys():
-            print(mat_avg[key][0][0]) 
-            for i in range(len(mat_avg[key])):
+    def avg_feature_vector_seg (avg_feature_vectors):
 
-                            
-                x.append(mat_avg[key][i][0])
-                y.append(mat_avg[key][i][1])
-                z.append(mat_avg[key][i][2])
-                amount.append(mat_avg[key][i][4])
-            print("x ",x)
-                
+        avg_feature_vectors = np.array(avg_feature_vectors)
+
+        x = np.average(avg_feature_vectors[:,0], weights=avg_feature_vectors[:,4])
+        y = np.average(avg_feature_vectors[:,1], weights=avg_feature_vectors[:,4])
+        z = np.average(avg_feature_vectors[:,2], weights=avg_feature_vectors[:,4])
+        total_weight = np.sum(avg_feature_vectors[:,4])
         
-            weig_avg_x = np.average(np.array(x,dtype=np.float128), weights=amount)
-            weig_avg_y = np.average(np.array(y,dtype=np.float128), weights=amount)
-            weig_avg_z = np.average(np.array(z,dtype=np.float128), weights=amount)
-            feature_vec_weigh_avg[key] = [weig_avg_x, weig_avg_y, weig_avg_z, 0]
-        
-        return feature_vec_weigh_avg
+        return np.array([x, y, z, 0, total_weight])
 
 
     
@@ -286,11 +268,8 @@ class PointCloud:
         # Creating a list of points in the world frame
         segmented_point_cloud = {}
         segmented_pc_f = {}
-        segmented_point_cloudlast = {}
         point_individual = {}
-        point_individual_pc = {}
-        yes = {}
-        no = 0
+        feature_vec_weigh_avg = {}
 
 
         # Iterating through each frame
@@ -299,8 +278,6 @@ class PointCloud:
             # Getting the points in the world frame
             point_individual = self.get_segmented_points(frames[i], segments[i], poses[i], rotations[i])
 
-            
-
             # Adding the list of points to the segmented point cloud list
             for key in point_individual.keys():
 
@@ -308,106 +285,43 @@ class PointCloud:
                 if key == -1 or key == 0:
                     continue
 
-                # Saving pure geoms
+                # Saving feature vectors of pure geoms
                 if (m.geom(int(key)).bodyid[0] == 0):
                     try:
-                        point_individual_pc[[m.geom(int(key)).name]].extend(point_individual[key])
                         segmented_point_cloud[m.geom(int(key)).name].append(self.get_feature_seg_vector(m.geom(int(key)).name, np.array(point_individual[key])))
                     except:
-                        point_individual_pc[m.geom(int(key)).name] = point_individual[key]
                         segmented_point_cloud[m.geom(int(key)).name] = [self.get_feature_seg_vector(m.geom(int(key)).name, np.array(point_individual[key]))]
-                    #segmented_point_cloudlast[m.geom(int(key)).name].append(segmented_point_cloud[m.geom(int(key)).name])
 
                     continue
 
-                # Saving geoms that are part of a body
+                # Saving feature vectors of geoms that are part of a body
                 body_id = m.geom(int(key)).bodyid[0]
                 while m.body(body_id).parentid != 0:
                     body_id = m.body(body_id).parentid[0]
                 
-                # Creating or extending the list of points for the body
+                # Listing feature vectors that belong to a single body
                 name = m.body(body_id).name
                 try:
-                    point_individual_pc[name].extend(point_individual[key])
                     segmented_point_cloud[name].append(self.get_feature_seg_vector(name, np.array(point_individual[key])))
 
                 except:
-                    point_individual_pc[name] = point_individual[key]
                     segmented_point_cloud[name] = [self.get_feature_seg_vector(name, np.array(point_individual[key]))]
-        
-        
-            #segmented_point_cloudlast[i] = self.avg_feature_vector_seg(segmented_point_cloud)
-            # Equivalent
 
+
+            # Getting weighted average of each feature vectors in a given frame
             for key in segmented_point_cloud.keys():
                 try:
-                    segmented_pc_f[key].append(segmented_point_cloud[key])
+                    segmented_pc_f[key].append(self.avg_feature_vector_seg(segmented_point_cloud[key]))
                 except:
-                    segmented_pc_f[key] = segmented_point_cloud[key]
-                #print(segmented_point_cloud[key])
+                    segmented_pc_f[key] = [self.avg_feature_vector_seg(segmented_point_cloud[key])]
 
-        #yes = self.avg_feature_vector_seg(segmented_pc_f)
-        x = []
-        y = []
-        z = []
-        amount = []
-        i = 0
-
-        for key in segmented_point_cloud.keys():
-            print(len(segmented_point_cloud[key])) 
-            for i in range(len(segmented_point_cloud[key])):
-                print(segmented_pc_f[key][i][1])
-
-                            
-                x.append(segmented_point_cloud[key][i][0])
-                y.append(segmented_point_cloud[key][i][1])
-                z.append(segmented_point_cloud[key][i][2])
-                amount.append(segmented_point_cloud[key][i][4])
-            print("x ",x)
-                
-            
-            weig_avg_x = np.average(np.array(x,dtype=np.float128), weights=amount)
-            weig_avg_y = np.average(np.array(y,dtype=np.float128), weights=amount)
-            weig_avg_z = np.average(np.array(z,dtype=np.float128), weights=amount)
-            segmented_pc_f[key] = [weig_avg_x, weig_avg_y, weig_avg_z, 0]
-
-        #segmented_point_cloudlast = segmented_pc_f
-                
-                #segmented_point_cloudlast[name].append(segmented_point_cloud[name])
-            
-                        #if segmented_point_cloud != segmented_point_cloudlast:
-
-                #print(segmented_point_cloud[key][i]) # x
-
-                #print(point_individual_pc[key])
         
+        # Getting final weighted average of each feature vectors from all frames
+        for key in segmented_pc_f.keys():
+            feature_vec_weigh_avg[key] = self.avg_feature_vector_seg(segmented_pc_f[key])
 
-            
-                #print(segmented_point_cloud)
-                #print("")
-                #no += 1
-        #print("num total ")
-        #print( no)
-        return segmented_pc_f
+        return feature_vec_weigh_avg
                     
-
-                
-            
-                
-
-               
-                                    
-
-        
-                
-
-         
-                
-        
-
-        
-    
-
 
 
     def get_map(self, frames, poses, rotations):
