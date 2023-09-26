@@ -1,0 +1,4 @@
+    <body name="<BODY>" pos="<POS>">
+      <freejoint name="<JOINT>"/>
+      <geom pos="0 0 0" size="0.05" type="sphere" rgba="1 1 0 1"/>
+    </body>

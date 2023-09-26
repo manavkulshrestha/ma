@@ -10,7 +10,7 @@ from scipy.spatial.transform import Rotation as R
 from utility import unit
 from controller import Controller
 from human import Human
-from randomrobot import Robot
+from agent import Robot
 
 # notes: rolling friction may be too low, maybe should be velocity servo
 # brownion motion and repulsion field for agent movement

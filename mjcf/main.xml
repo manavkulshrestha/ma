@@ -21,12 +21,12 @@
 	  <geom name="floor" type="plane" size="100 100 .2" material="grid" friction="0 0.005 0.0001"/>
     
     <!-- human agents -->
-    <site name="site_object" pos="-0.2 0 0.05" size="0.05" type="sphere" rgba="1 1 0 1"/>
-    <geom name="geom_object" pos="0.2 0 0.05" size="0.05" type="sphere" rgba="1 1 0 1"/>
+    <!-- <site name="site_object" pos="-0.2 0 0.05" size="0.05" type="sphere" rgba="1 1 0 1"/>
+    <geom name="geom_object" pos="0.2 0 0.05" size="0.05" type="sphere" rgba="1 1 0 1"/> -->
 
-    <body name="body_object" pos="0 0.2 0.05">
-      <freejoint/>
-      <geom name="body_object_geom" pos="0.2 0 0.05" size="0.05" type="sphere" rgba="1 1 0 1"/>
+    <body name="body_object" pos="0.2 0 0.05">
+      <freejoint name="human0"/>
+      <geom name="body_object_geom" pos="0 0 0" size="0.05" type="sphere" rgba="1 1 0 1"/>
     </body>
 
     <!-- <body name="body_object" pos="0 0 0">
@@ -36,7 +36,7 @@
 
     <!-- robot -->
     <body name="robot0" pos="0 0 0.01">
-      <freejoint/>
+      <freejoint name="robot0"/>
       <body name="base_link" pos="0 0 0">
       
         <inertial pos="0 0 0" quat="0.994532 -0.0072214 -0.0815456 -0.0648458" mass="0.825735" diaginertia="0.00221987 0.00211778 0.00200059"/>

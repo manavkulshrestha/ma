@@ -1,0 +1,31 @@
+    <body name="<BODY>" pos="<POS>">
+      <freejoint name="<JOINT>"/>
+      <body pos="0 0 0">
+        <inertial pos="0 0 0" quat="0.994532 -0.0072214 -0.0815456 -0.0648458" mass="0.825735" diaginertia="0.00221987 0.00211778 0.00200059"/>
+        <geom pos="-0.032 0 0" type="mesh" mesh="burger_base"/>
+        <body name="<BODY>_wheel_left_link" pos="0 0.08 0.023" quat="0.707388 -0.706825 0 0">
+          <inertial pos="0 0 0" quat="-0.000890159 0.706886 0.000889646 0.707326" mass="0.0284989" diaginertia="2.07126e-05 1.11924e-05 1.11756e-05"/>
+          <joint name="<BODY>_wheel_left_joint" pos="0 0 0" axis="0 0 1"/>
+          <geom quat="0.707388 0.706825 0 0" type="mesh" mesh="left_tire"/>
+        </body>
+
+        <body name="<BODY>_wheel_right_link" pos="0 -0.08 0.023" quat="0.707388 -0.706825 0 0">
+          <inertial pos="0 0 0" quat="-0.000890159 0.706886 0.000889646 0.707326" mass="0.0284989" diaginertia="2.07126e-05 1.11924e-05 1.11756e-05"/>
+          <joint name="<BODY>_wheel_right_joint" pos="0 0 0" axis="0 0 1"/>
+          <geom quat="0.707388 0.706825 0 0" type="mesh" mesh="right_tire"/>
+        </body>
+
+        <body name="c<BODY>_aster_back_link" pos="-0.081 0 -0.004" quat="0.707388 -0.706825 0 0">
+          <inertial pos="0 0 0" mass="0.005" diaginertia="0.001 0.001 0.001"/>
+          <geom size="0.015 0.0045 0.01" pos="0 0.001 0" type="box"/>
+        </body>
+
+        <body name="<BODY>_imu_link" pos="-0.032 0 0.068"/>
+
+        <body name="<BODY>_base_scan" pos="-0.032 0 0.172">
+          <inertial pos="0 0 0" mass="0.114" diaginertia="0.001 0.001 0.001"/>
+          <geom type="mesh" mesh="lds"/>
+        </body>
+
+      </body>
+    </body>

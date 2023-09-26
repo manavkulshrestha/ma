@@ -23,5 +23,11 @@ def signed_rad(rad):
     
     return rad
 
-def robot_pos(name, data, dim=3):
-    return data.site(name).pos[:dim]
+def body_pos(name, access, dim=3):
+    return access.body(name).xpos[:dim]
+
+def uniform_displacevec(constant):
+    angle = np.random.uniform(-np.pi, np.pi)
+    displace_vec = constant * np.array([np.cos(angle), np.sin(angle)])
+
+    return (displace_vec, angle) if return_angle else displace_vec
