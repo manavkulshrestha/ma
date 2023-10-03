@@ -8,6 +8,7 @@ from torch_geometric.datasets import ModelNet
 from torch_geometric.loader import DataLoader
 from torch_geometric.nn import MLP, PointNetConv, fps, global_max_pool, radius
 from torch_geometric.typing import WITH_TORCH_CLUSTER
+from _datasets import ObjectPointCloudDataset
 
 if not WITH_TORCH_CLUSTER:
     print("This example requires 'torch-cluster'")
@@ -39,6 +40,7 @@ class SAModule(torch.nn.Module):
         edge_index = torch.stack([col, row], dim=0)
         
         x_dst = None if x is None else x[idx]
+
         # Extracting features from two previous layers to generate a sampled point cloud
         x = self.conv((x, x_dst), (pos, pos[idx]), edge_index)
         pos, batch = pos[idx], batch[idx]
@@ -84,7 +86,7 @@ class Net(torch.nn.Module):
         self.mlp = MLP([1024, 512, 256, 78], dropout=0.5, norm=None)
 
     def forward(self, data):
-        sa0_out = (data.x, data.pos, data.batch)
+        sa0_out = (None, data.x, data.batch)
         sa1_out = self.sa1_module(*sa0_out)
         sa2_out = self.sa2_module(*sa1_out)
         sa3_out = self.sa3_module(*sa2_out)
@@ -109,7 +111,7 @@ def train(epoch):
         # Zero out gradients
         optimizer.zero_grad()
         # Compute loss
-        loss = F.nll_loss(model(data), data.y)
+        loss = F.nll_loss(model(data), data.y.type(torch.LongTensor).to(device))
         # Compute gradients
         loss.backward()
         # Update parameters
@@ -140,34 +142,46 @@ def test(loader):
 #  ########################### main ###########################
 if __name__ == '__main__':
     # Getting the data off files (in our case npy files)
-    path = osp.join(osp.dirname(osp.realpath(__file__)), '..',
-                    'data/ModelNet10')
+    # path = osp.join(osp.dirname(osp.realpath(__file__)), '..',
+    #                 'data/ModelNet10')
     
     # ############################################################
     # THIS DOES NOT DIRECTLY APPLY TO US YET
     # ############################################################
 
-    # Preprocessing functions for transforming the data
-    pre_transform, transform = T.NormalizeScale(), T.SamplePoints(1024)
+    # # Preprocessing functions for transforming the data
+    # pre_transform, transform = T.NormalizeScale(), T.SamplePoints(1024)
 
-    # Instantiating the dataset with the InMemoryDataset class
-    train_dataset = ModelNet(path, '10', True, transform, pre_transform)
-    test_dataset = ModelNet(path, '10', False, transform, pre_transform)
+    # # Instantiating the dataset with the InMemoryDataset class
+    # train_dataset = ModelNet(path, '10', True, transform, pre_transform)
+    # test_dataset = ModelNet(path, '10', False, transform, pre_transform)
 
     # ############################################################
     # THIS DOES APPLY TO US
     # ############################################################
+
+    train_dataset = ObjectPointCloudDataset(root = '../dataset/v4', 
+                                      chunk = (0, 87984), 
+                                      sample_count = 512,
+                                      output_name = 'train')
+    
+    test_dataset = ObjectPointCloudDataset(root = '../dataset/v4', 
+                                      chunk = (87984, 109980), 
+                                      sample_count = 512,
+                                      output_name = 'test')
 
     # Create intances of dataloaders for training and testing
     # TODO: Check if batch size is correct or test with different ones
     # TODO: Check if num_workers is correct or test with different ones
     train_loader = DataLoader(train_dataset, batch_size=32, shuffle=True,
                               num_workers=6)
+    
     test_loader = DataLoader(test_dataset, batch_size=32, shuffle=False,
                              num_workers=6)
 
     # Use cuda if available
     device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
+    print(device)
 
     # Instantiate the model in the device
     model = Net().to(device)
@@ -176,7 +190,7 @@ if __name__ == '__main__':
     # TODO: Check if lr is correct or test with different ones
     optimizer = torch.optim.Adam(model.parameters(), lr=0.001)
 
-    # Train the model
+    # # Train the model
     for epoch in range(1, 201):
         train(epoch)
         test_acc = test(test_loader)
