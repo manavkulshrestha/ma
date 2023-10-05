@@ -1,0 +1,79 @@
+<mujoco model="turtlebot3_burger">
+  <compiler angle="radian" meshdir="../../robot/" autolimits="true"/>
+  <!-- <statistic meansize="0.0563245" extent="0.284544" center="-0.0314095 -1.28119e-06 0.0998247"/> -->
+
+  <asset>
+    <!-- sky and plane -->
+    <texture type="skybox" builtin="gradient" width="2048" height="2048"/>
+    <texture name="grid" type="2d" builtin="checker" width="512" height="512" rgb1=".1 .2 .3" rgb2=".2 .3 .4"/>
+    <material name="grid" texture="grid" texrepeat="1 1" texuniform="true" reflectance=".2"/>
+
+    <!-- robot -->
+    <mesh name="burger_base" file="burger_base.stl" scale="0.001 0.001 0.001"/>
+    <mesh name="left_tire" file="left_tire.stl" scale="0.001 0.001 0.001"/>
+    <mesh name="right_tire" file="right_tire.stl" scale="0.001 0.001 0.001"/>
+    <mesh name="lds" file="lds.stl" scale="0.001 0.001 0.001"/>
+  </asset>
+
+  <worldbody>
+    <!-- sky and plane -->
+    <light cutoff="100" diffuse="1 1 1" dir="0 0 -1.3" directional="true" exponent="1" pos="0 0 1.3" specular="0.1 0.1 0.1"/>
+	  <geom name="floor" type="plane" size="100 100 .2" material="grid" friction="0 0.005 0.0001"/>
+    
+    <!-- human agents -->
+    <body name="human0" pos="0.28928129607405917 -0.6559130091592484 0.05">
+      <freejoint name="human0"/>
+      <geom pos="0 0 0" size="0.05" type="sphere" rgba="1 1 0 1"/>
+    </body>
+
+    <body name="human1" pos="0.5566467999244156 0.49049165652980387 0.05">
+      <freejoint name="human1"/>
+      <geom pos="0 0 0" size="0.05" type="sphere" rgba="1 1 0 1"/>
+    </body>
+
+    <body name="human2" pos="0.9031937463246786 -0.4431995299999958 0.05">
+      <freejoint name="human2"/>
+      <geom pos="0 0 0" size="0.05" type="sphere" rgba="1 1 0 1"/>
+    </body>
+
+    <body name="human3" pos="-0.9173574137410294 0.863420314031411 0.05">
+      <freejoint name="human3"/>
+      <geom pos="0 0 0" size="0.05" type="sphere" rgba="1 1 0 1"/>
+    </body>
+
+    <body name="human4" pos="-0.7683578222282028 -0.9380403530180887 0.05">
+      <freejoint name="human4"/>
+      <geom pos="0 0 0" size="0.05" type="sphere" rgba="1 1 0 1"/>
+    </body>
+
+    <!-- robot agents -->
+    <body name="robot0" pos="-0.010130783092384466 -0.7641588992526123 0.05">
+      <freejoint name="robot0"/>
+      <geom pos="0 0 0" size="0.05" type="sphere" rgba="1 0 0 1"/>
+    </body>
+
+    <body name="robot1" pos="0.0016169431846166926 0.2251525055551271 0.05">
+      <freejoint name="robot1"/>
+      <geom pos="0 0 0" size="0.05" type="sphere" rgba="1 0 0 1"/>
+    </body>
+
+    <body name="robot2" pos="-0.990507600171266 -0.1205611228609782 0.05">
+      <freejoint name="robot2"/>
+      <geom pos="0 0 0" size="0.05" type="sphere" rgba="1 0 0 1"/>
+    </body>
+
+    <body name="robot3" pos="-0.6988671984034405 0.20348418477271646 0.05">
+      <freejoint name="robot3"/>
+      <geom pos="0 0 0" size="0.05" type="sphere" rgba="1 0 0 1"/>
+    </body>
+
+    <body name="robot4" pos="-0.19414024274385122 0.05925566476862887 0.05">
+      <freejoint name="robot4"/>
+      <geom pos="0 0 0" size="0.05" type="sphere" rgba="1 0 0 1"/>
+    </body>
+
+    <!-- goal positions -->
+<!-- goals -->
+
+  </worldbody>
+</mujoco>

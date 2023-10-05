@@ -1,4 +1,6 @@
+import datetime
 import numpy as np
+import torch_geometric
 
 
 def signed_rad(rad):
@@ -11,8 +13,12 @@ def signed_rad(rad):
 
 
 def main():
-    print(signed_rad(1.9*np.pi))
+    pass
 
 
 if __name__ == '__main__':
     main()
+
+    # pip install torch-scatter -f https://data.pyg.org/whl/torch-2.1.0.html
+
+    # pip install torch-sparse torch-scatter torch-cluster -f https://pytorch-geometric.com/whl/torch-2.1.0+cu121.html

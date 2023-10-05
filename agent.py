@@ -74,7 +74,7 @@ class Robot(Agent):
         displace_vec, angle = uniform_displacevec(10*self.speed, return_angle=True)
         self.move(displace_vec)
         # self.move(policy())
-        return angle
+        return angle, norm(displace_vec)
 
 
 class Human(Agent):

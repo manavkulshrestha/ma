@@ -1,5 +1,5 @@
 <mujoco model="turtlebot3_burger">
-  <compiler angle="radian" meshdir="../robot/" autolimits="true"/>
+  <compiler angle="radian" meshdir="../../robot/" autolimits="true"/>
   <!-- <statistic meansize="0.0563245" extent="0.284544" center="-0.0314095 -1.28119e-06 0.0998247"/> -->
 
   <asset>
