@@ -34,6 +34,7 @@ class Sensors:
                 # Can add out = np.zeros((m.vis.map[cam].height, m.vis.map[cam].width, 3), 
                 # dtype=np.uint8) to render() to save memory
                 render = r.render()
+                render[render > 3.0] = np.nan
                 result[cam] = render
                 
         return result

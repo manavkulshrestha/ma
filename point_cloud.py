@@ -1,5 +1,6 @@
 import numpy as np
 import math
+from math import cos, sin
 
 
 
@@ -121,8 +122,8 @@ class PointCloud:
             # Adding the list of points to the segmented point cloud list
             for key in segment_points.keys():
 
-                 # Ignoring floor and world body
-                if key == -1 or key == 0:
+                 # Ignoring world body
+                if key == -1:
                     continue
 
                 # Saving pure geoms
@@ -178,7 +179,7 @@ class PointCloud:
 
 
 
-    def get_points(self, depth_frame, camera_pos, z_angle):
+    def get_points(self, depth_frame, camera_pos, rot_matrix):
         """
         Returns a list of points in the world frame from a depth frame and camera pose.
 
@@ -186,7 +187,7 @@ class PointCloud:
         ----------
         depth_frame : The depth frame from the camera.
         camera_pos : The position of the camera in the world frame.
-        rot : The rotation of the camera in the z-axis (extracted from 
+        rot : The rotation matrix associated to the camera 
         
         R.from_quat(m.body(m.cam_bodyid[i]).quat).as_euler('xyz', degrees=True)
         
@@ -200,10 +201,10 @@ class PointCloud:
         points = []
 
         # Creating rotation matrix
-        z_angle = -z_angle - 180  # Adjusting for the camera's orientation
+        rot_matrix = -rot_matrix - 180  # Adjusting for the camera's orientation
         rot = np.array([
-                        [math.cos(z_angle * np.pi / 180), -math.sin(z_angle * np.pi / 180), 0],
-                        [math.sin(z_angle * np.pi / 180), math.cos(z_angle * np.pi / 180), 0],
+                        [math.cos(rot_matrix * np.pi / 180), -math.sin(rot_matrix * np.pi / 180), 0],
+                        [math.sin(rot_matrix * np.pi / 180), math.cos(rot_matrix * np.pi / 180), 0],
                         [0, 0, 1]
                         ])
 
@@ -226,16 +227,16 @@ class PointCloud:
                 point = np.matmul(mat, D)
                 
                 # Adjusting axis to match reconstruction
-                transform = np.array([[0,  0, 1],
-                                      [0, -1, 0],
-                                      [-1, 0, 0]])
-                point = np.matmul(transform, point)
+                # transform = np.array([[0,  0, 1],
+                #                       [0, -1, 0],
+                #                       [-1, 0, 0]])
+                # point = np.matmul(transform, point)
 
                 # Rotating the point to the world frame with pivot at the camera
                 point = np.matmul(rot, point)
 
                 # Translating the point to the world frame
-                point = point + camera_pos
+                point = point - camera_pos
 
                 if point[2] < 0.03:
                     continue
@@ -243,12 +244,11 @@ class PointCloud:
                 # Adding the point to the list of points
                 points.append(point)
 
-
         return points
     
 
 
-    def get_segmented_points(self, depth_frame, segment_frame, camera_pos, z_angle):
+    def get_segmented_points(self, depth_frame, segment_frame, camera_pos, rot_matrix):
         """
         Returns a list of points in the world frame from a depth frame and camera pose.
 
@@ -256,7 +256,7 @@ class PointCloud:
         ----------
         depth_frame : The depth frame from the camera.
         camera_pos : The position of the camera in the world frame.
-        rot : The rotation of the camera in the z-axis (extracted from 
+        rot : The rotation matrix associated to the camera 
         
         R.from_quat(m.body(m.cam_bodyid[i]).quat).as_euler('xyz', degrees=True)
         
@@ -269,14 +269,6 @@ class PointCloud:
         # List of points in the world frame
         segment_points = {}
 
-        # Creating rotation matrix
-        z_angle = -z_angle - 180  # Adjusting for the camera's orientation
-        rot = np.array([
-                        [math.cos(z_angle * np.pi / 180), -math.sin(z_angle * np.pi / 180), 0],
-                        [math.sin(z_angle * np.pi / 180), math.cos(z_angle * np.pi / 180), 0],
-                        [0, 0, 1]
-                        ])
-
         # Finding [x,y,z] coordinates of each pixel
         for i in self.index_y:
             for j in self.index_x:
@@ -284,7 +276,7 @@ class PointCloud:
                 D = depth_frame[i][j]
 
                 # Skip if the pixel is not in the image
-                if np.isnan(D[0]) or segment_frame[i][j] <= 0:
+                if np.isnan(D[0]) or segment_frame[i][j] < 0:
                     continue
 
                 # Obtaining world coordinates from depth pixels               
@@ -294,21 +286,18 @@ class PointCloud:
                                 [1]
                                 ])
                 point = np.matmul(mat, D)
-                
-                # Adjusting axis to match reconstruction
-                transform = np.array([[0,  0, 1],
-                                      [0, -1, 0],
-                                      [-1, 0, 0]])
-                point = np.matmul(transform, point)
 
                 # Rotating the point to the world frame with pivot at the camera
-                point = np.matmul(rot, point)
+                point = np.matmul(rot_matrix, point)
+                
+                # Adjusting axis to match reconstruction
+                transform = np.array([[-1, 0, 0],
+                                      [0, 0, 1],
+                                      [0, -1, 0]])
+                point = np.matmul(transform, point)
 
                 # Translating the point to the world frame
                 point = point + camera_pos
-
-                if point[2] < 0.03:
-                    continue
 
                 # Adding points to their respective segemntation classes
                 try:

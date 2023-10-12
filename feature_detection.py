@@ -92,7 +92,9 @@ class Net(torch.nn.Module):
         sa3_out = self.sa3_module(*sa2_out)
         x, pos, batch = sa3_out
 
-        return self.mlp(x).log_softmax(dim=-1)
+        result, obj_features = self.mlp(x, return_emb=True)
+
+        return result.log_softmax(dim=-1), obj_features
 
 
 
@@ -111,7 +113,7 @@ def train(epoch):
         # Zero out gradients
         optimizer.zero_grad()
         # Compute loss
-        loss = F.nll_loss(model(data), data.y.type(torch.LongTensor).to(device))
+        loss = F.nll_loss(model(data)[0], data.y.type(torch.LongTensor).to(device))
         # Compute gradients
         loss.backward()
         # Update parameters
@@ -130,7 +132,7 @@ def test(loader):
         data = data.to(device)
         # Compute predictions
         with torch.no_grad():
-            pred = model(data).max(1)[1]
+            pred = model(data)[0].max(1)[1]
         # Compute accuracy
         correct += pred.eq(data.y).sum().item()
 
@@ -160,24 +162,27 @@ if __name__ == '__main__':
     # THIS DOES APPLY TO US
     # ############################################################
 
-    train_dataset = ObjectPointCloudDataset(root = '../dataset/v4', 
+    train_dataset = ObjectPointCloudDataset(root = 'data/', 
                                       chunk = (0, 87984), 
                                       sample_count = 512,
-                                      output_name = 'train')
+                                      output_name = 'train',
+                                      
+                                      )
     
-    test_dataset = ObjectPointCloudDataset(root = '../dataset/v4', 
+    test_dataset = ObjectPointCloudDataset(root = 'data/', 
                                       chunk = (87984, 109980), 
                                       sample_count = 512,
-                                      output_name = 'test')
+                                      output_name = 'test',
+                                      )
 
     # Create intances of dataloaders for training and testing
     # TODO: Check if batch size is correct or test with different ones
     # TODO: Check if num_workers is correct or test with different ones
     train_loader = DataLoader(train_dataset, batch_size=32, shuffle=True,
-                              num_workers=6)
+                              num_workers=8)
     
     test_loader = DataLoader(test_dataset, batch_size=32, shuffle=False,
-                             num_workers=6)
+                             num_workers=8)
 
     # Use cuda if available
     device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
@@ -191,7 +196,16 @@ if __name__ == '__main__':
     optimizer = torch.optim.Adam(model.parameters(), lr=0.001)
 
     # # Train the model
-    for epoch in range(1, 201):
+    for epoch in range(1, 101):
+        
         train(epoch)
         test_acc = test(test_loader)
         print(f'Epoch: {epoch:03d}, Test: {test_acc:.4f}')
+
+        if epoch % 1 == 0:
+            torch.save({
+                'epoch': epoch,
+                'model_state_dict': model.state_dict(),
+                'optimizer_state_dict': optimizer.state_dict(),
+                'loss': test_acc
+            }, f'model_{epoch}_{test_acc}.pt')
