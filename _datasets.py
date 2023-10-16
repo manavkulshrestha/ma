@@ -18,6 +18,7 @@ class ObjectPointCloudDataset(InMemoryDataset):
         self.chunk = chunk
         self.sample_count = sample_count
         self.output_name = output_name
+        self.qt_file = qt_file
 
         super().__init__(root, transform, pre_transform, pre_filter, log)
         if qt_file is not None:
@@ -36,11 +37,7 @@ class ObjectPointCloudDataset(InMemoryDataset):
     
 
 
-    def process_files(self):
-        
-        if self.qt_file is not None:
-            return None
-        
+    def process_files(self):        
         data_entries = []
 
         files = os.listdir(self.root)

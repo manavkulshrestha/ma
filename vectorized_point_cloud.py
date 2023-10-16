@@ -108,6 +108,7 @@ class VectorizedPC:
         for value in values:
             frame_copy = frame.copy()
             frame_copy[segmentation != value] = np.nan
+            frame_copy[segmentation == -1] = np.nan
             segmented_pc[value] = self.get_points(frame_copy, 
                                                   rotation, 
                                                   position, 

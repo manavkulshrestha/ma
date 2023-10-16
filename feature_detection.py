@@ -166,7 +166,6 @@ if __name__ == '__main__':
                                       chunk = (0, 87984), 
                                       sample_count = 512,
                                       output_name = 'train',
-                                      
                                       )
     
     test_dataset = ObjectPointCloudDataset(root = 'data/', 
