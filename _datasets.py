@@ -49,12 +49,15 @@ class ObjectPointCloudDataset(InMemoryDataset):
 
             pc = pc[np.random.choice(pc.shape[0], self.sample_count)]
 
+            # TODO: Normalize by dividing by standard deviation
+            pc = pc / np.std(pc)
+
             # Obtaining id from filename
             id = int(files[i][:3])
 
             # Create data entry
             data_entries.append(Data(x = torch.tensor(pc, dtype=torch.float), 
-                                     y = torch.tensor(id, dtype=torch.LongTensor)))
+                                     y = torch.tensor(id, dtype=torch.long)))
 
         return data_entries
 
