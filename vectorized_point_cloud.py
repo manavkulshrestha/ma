@@ -78,6 +78,8 @@ class VectorizedPC:
 
         return points
     
+
+
     def get_segmented_points(self,
                              frame:np.ndarray,
                              segmentation:np.ndarray,
@@ -116,6 +118,8 @@ class VectorizedPC:
 
         return segmented_pc
     
+
+
     def centroids(self, pc):
         """
         Returns the centroids of the objects from the point cloud
@@ -126,29 +130,14 @@ class VectorizedPC:
         pc : numpy.ndarray
             The point cloud for each object
         """
-
         centroids = []
         # Calculating the mean in x, y ,z for the point cloud of the object
         for i in list(pc.keys()):
             centroids.append(np.mean(pc[i], axis=0))
-
-        # For generating the open 3d Visualization
-
-        #complete_pc = np.empty((0, 3))
-        #colors = np.empty((0, 3))
-        #for i in list(pc.keys()):
-        #    complete_pc = np.vstack((complete_pc, pc[i]))
-        #    colors = np.vstack((colors, np.tile([0, 255, 0], (pc[i].shape[0], 1))))
-
-        #for center in centroids:
-        #    complete_pc = np.vstack((complete_pc, center))
-        #    colors = np.vstack((colors, np.tile([255, 0, 0], (1, 1))))
-        #pcd = o3d.geometry.PointCloud()
-        #pcd.points = o3d.utility.Vector3dVector(complete_pc)
-        #pcd.colors = o3d.utility.Vector3dVector(colors)
-        #o3d.visualization.draw_geometries([pcd])
+        
         return centroids
 
+    
     
     def move_simple(self, *, t, func, axis=-1, model):
         """
@@ -166,9 +155,13 @@ class VectorizedPC:
         """
         # Iterates over the geoms and moves them
         for i in range(model.ngeom):
-            func=lambda x: (x/10) * 0.2 + 0.05*i
+            func=lambda x: (x) * 0.2
 
-            model.geom(i).pos[axis] = func(t)
+            model.geom(i).pos[axis] += func(t)
+
+        return model
+
+
 
     def calc_vel(self, fin, ini, times, m):
         """

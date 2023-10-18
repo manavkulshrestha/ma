@@ -52,6 +52,9 @@ class ObjectPointCloudDataset(InMemoryDataset):
             # TODO: Normalize by dividing by standard deviation
             pc = pc / np.std(pc)
 
+            # Realign to origin
+            pc = pc - np.mean(pc, axis=0)
+
             # Obtaining id from filename
             id = int(files[i][:3])
 

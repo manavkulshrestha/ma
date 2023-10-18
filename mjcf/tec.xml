@@ -1,6 +1,12 @@
 <mujoco model="turtlebot3_burger">
+  
   <compiler angle="radian" meshdir="./robot/" autolimits="true"/>
   <statistic meansize="0.0563245" extent="0.284544" center="-0.0314095 -1.28119e-06 0.0998247"/>
+
+
+  <visual>
+    <global offwidth="1920" offheight="1080"/>
+  </visual>
 
   <asset>
     <!-- sky and plane -->
@@ -21,13 +27,14 @@
 	  <geom name="floor" type="plane" size="100 100 .2" material="grid"/>
     
     <!-- human agent -->
-    <site name="human1" pos="0.2 -0.2 0.05" size="0.05" type="sphere" rgba="1 0 0 1"/>
-    <site name="human2" pos="0.2 0.2 0.05" size="0.05" type="sphere" rgba="0 1 0 1"/>
-    <site name="human3" pos="0.3 0 0.05" size="0.05" type="sphere" rgba="0 0 1 1"/>
-
+    <geom name="human1" pos="0.2 -0.2 0.05" size="0.05" type="sphere" rgba="1 0 0 1"/>
+    <geom name="human2" pos="0.2 0.2 0.05" size="0.05" type="sphere" rgba="0 1 0 1"/>
+    <geom name="human3" pos="0.3 0 0.05" size="0.05" type="sphere" rgba="0 0 1 1"/>
+    <geom name="human4" pos="0.5 0 0.05" size="0.15 0.15 0.01" type="box" rgba="1 0 0 1" zaxis="1 0 0"/>
+    
     <!-- robot -->
     <body name="robot1">
-      <freejoint/>
+      <freejoint group="1"/>
       <body name="base_link1" pos="0 -0.02 0.01">
       
         <inertial pos="0 0 0" quat="0.994532 -0.0072214 -0.0815456 -0.0648458" mass="0.825735" diaginertia="0.00221987 0.00211778 0.00200059"/>
@@ -63,7 +70,7 @@
     </body>
 
     <body name="robot2">
-      <freejoint/>
+      <freejoint group="2"/>
       <body name="base_link2" pos="0 0.2 0.01">
       
         <inertial pos="0 0 0" quat="0.994532 -0.0072214 -0.0815456 -0.0648458" mass="0.825735" diaginertia="0.00221987 0.00211778 0.00200059"/>
@@ -91,6 +98,80 @@
         <body name="imu_link2" pos="-0.032 0 0.068"/>
 
         <body name="base_scan2" pos="-0.032 0 0.172">
+          <inertial pos="0 0 0" mass="0.114" diaginertia="0.001 0.001 0.001"/>
+          <geom type="mesh" mesh="lds"/>
+        </body>
+
+      </body>
+    </body>
+
+
+    <body name="robot3">
+      <freejoint group="3"/>
+      <body name="base_link3" pos="0.2 -0.6 0.01" quat="0.707388 0 0 0.707388">
+      
+        <inertial pos="0 0 0" quat="0.994532 -0.0072214 -0.0815456 -0.0648458" mass="0.825735" diaginertia="0.00221987 0.00211778 0.00200059"/>
+        <geom pos="-0.032 0 0" type="mesh" mesh="burger_base"/>
+        <camera name="camera3" pos="-0.01 0 0.195" xyaxes="0 -0.5 0 -0.01 0 2" mode="fixed" fovy="60" />
+
+
+        <body name="wheel_left_link3" pos="0 0.08 0.023" quat="0.707388 -0.706825 0 0">
+          <inertial pos="0 0 0" quat="-0.000890159 0.706886 0.000889646 0.707326" mass="0.0284989" diaginertia="2.07126e-05 1.11924e-05 1.11756e-05"/>
+          <joint name="wheel_left_joint3" pos="0 0 0" axis="0 0 1"/>
+          <geom quat="0.707388 0.706825 0 0" type="mesh" mesh="left_tire"/>
+        </body>
+
+        <body name="wheel_right_link3" pos="0 -0.08 0.023" quat="0.707388 -0.706825 0 0">
+          <inertial pos="0 0 0" quat="-0.000890159 0.706886 0.000889646 0.707326" mass="0.0284989" diaginertia="2.07126e-05 1.11924e-05 1.11756e-05"/>
+          <joint name="wheel_right_joint3" pos="0 0 0" axis="0 0 1"/>
+          <geom quat="0.707388 0.706825 0 0" type="mesh" mesh="right_tire"/>
+        </body>
+
+        <body name="caster_back_link3" pos="-0.081 0 -0.004" quat="0.707388 -0.706825 0 0">
+          <inertial pos="0 0 0" mass="0.005" diaginertia="0.001 0.001 0.001"/>
+          <geom size="0.015 0.0045 0.01" pos="0 0.001 0" type="box"/>
+        </body>
+
+        <body name="imu_link3" pos="-0.032 0 0.068"/>
+
+        <body name="base_scan3" pos="-0.032 0 0.172">
+          <inertial pos="0 0 0" mass="0.114" diaginertia="0.001 0.001 0.001"/>
+          <geom type="mesh" mesh="lds"/>
+        </body>
+
+      </body>
+    </body>
+
+
+    <body name="robot4">
+      <freejoint group="4"/>
+      <body name="base_link4" pos="0.2 0.6 0.01" quat="0.707388 0 0 -0.707388">
+      
+        <inertial pos="0 0 0" quat="0.994532 -0.0072214 -0.0815456 -0.0648458" mass="0.825735" diaginertia="0.00221987 0.00211778 0.00200059"/>
+        <geom pos="-0.032 0 0" type="mesh" mesh="burger_base"/>
+        <camera name="camera4" pos="-0.01 0 0.195" xyaxes="0 -0.5 0 -0.01 0 2" mode="fixed" fovy="60" />
+
+
+        <body name="wheel_left_link4" pos="0 0.08 0.023" quat="0.707388 -0.706825 0 0">
+          <inertial pos="0 0 0" quat="-0.000890159 0.706886 0.000889646 0.707326" mass="0.0284989" diaginertia="2.07126e-05 1.11924e-05 1.11756e-05"/>
+          <joint name="wheel_left_joint4" pos="0 0 0" axis="0 0 1"/>
+          <geom quat="0.707388 0.706825 0 0" type="mesh" mesh="left_tire"/>
+        </body>
+
+        <body name="wheel_right_link4" pos="0 -0.08 0.023" quat="0.707388 -0.706825 0 0">
+          <inertial pos="0 0 0" quat="-0.000890159 0.706886 0.000889646 0.707326" mass="0.0284989" diaginertia="2.07126e-05 1.11924e-05 1.11756e-05"/>
+          <joint name="wheel_right_joint4" pos="0 0 0" axis="0 0 1"/>
+          <geom quat="0.707388 0.706825 0 0" type="mesh" mesh="right_tire"/>
+        </body>
+
+        <body name="caster_back_link4" pos="-0.081 0 -0.004" quat="0.707388 -0.706825 0 0">
+          <inertial pos="0 0 0" mass="0.005" diaginertia="0.001 0.001 0.001"/>
+          <geom size="0.015 0.0045 0.01" pos="0 0.001 0" type="box"/>
+        </body>
+
+        <body name="imu_link4" pos="-0.032 0 0.068"/>
+
+        <body name="base_scan4" pos="-0.032 0 0.172">
           <inertial pos="0 0 0" mass="0.114" diaginertia="0.001 0.001 0.001"/>
           <geom type="mesh" mesh="lds"/>
         </body>

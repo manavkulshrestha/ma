@@ -162,16 +162,16 @@ if __name__ == '__main__':
     # THIS DOES APPLY TO US
     # ############################################################
 
-    train_dataset = ObjectPointCloudDataset(root = 'data/', 
+    train_dataset = ObjectPointCloudDataset(root = '../dataset/v4', 
                                       chunk = (0, 87984), 
                                       sample_count = 512,
-                                      output_name = 'train',
+                                      output_name = 'trainv3',
                                       )
     
-    test_dataset = ObjectPointCloudDataset(root = 'data/', 
+    test_dataset = ObjectPointCloudDataset(root = '../dataset/v4', 
                                       chunk = (87984, 109980), 
                                       sample_count = 512,
-                                      output_name = 'test',
+                                      output_name = 'testv3',
                                       )
 
     # Create intances of dataloaders for training and testing

@@ -394,3 +394,78 @@ ERROR: mjv_updateSceneState: m->nu changed
 Tue Aug 29 15:41:27 2023
 ERROR: mjv_updateSceneState: m->nu changed
 
+Thu Sep  7 16:07:13 2023
+ERROR: mjv_updateSceneState: m->nu changed
+
+Thu Sep  7 16:13:56 2023
+ERROR: mjv_updateSceneState: m->nu changed
+
+Tue Sep 12 13:11:53 2023
+ERROR: could not create window
+
+Wed Sep 13 09:58:49 2023
+ERROR: mjv_updateSceneState: m->nu changed
+
+Thu Sep 14 08:33:36 2023
+ERROR: mjv_updateSceneState: m->nu changed
+
+Wed Oct 11 16:13:39 2023
+ERROR: could not create window
+
+Wed Oct 11 16:15:01 2023
+ERROR: could not create window
+
+Wed Oct 11 16:16:24 2023
+ERROR: could not create window
+
+Thu Oct 12 10:42:40 2023
+ERROR: could not create window
+
+Thu Oct 12 10:48:35 2023
+ERROR: could not create window
+
+Thu Oct 12 10:58:26 2023
+ERROR: could not create window
+
+Thu Oct 12 10:58:47 2023
+ERROR: could not create window
+
+Thu Oct 12 10:59:38 2023
+ERROR: could not create window
+
+Thu Oct 12 11:00:17 2023
+ERROR: could not create window
+
+Thu Oct 12 12:42:52 2023
+ERROR: mjv_updateSceneState: m->nu changed
+
+Thu Oct 12 15:17:05 2023
+ERROR: Default framebuffer is not complete, error 0x0
+
+Thu Oct 12 15:17:43 2023
+ERROR: Default framebuffer is not complete, error 0x0
+
+Thu Oct 12 15:39:22 2023
+ERROR: Default framebuffer is not complete, error 0x0
+
+Thu Oct 12 15:40:44 2023
+ERROR: Default framebuffer is not complete, error 0x0
+
+Thu Oct 12 15:43:13 2023
+ERROR: Default framebuffer is not complete, error 0x0
+
+Thu Oct 12 15:49:25 2023
+ERROR: could not create window
+
+Thu Oct 12 15:49:56 2023
+ERROR: could not create window
+
+Thu Oct 12 15:53:06 2023
+ERROR: could not create window
+
+Thu Oct 12 15:58:14 2023
+ERROR: could not create window
+
+Fri Oct 13 12:38:02 2023
+ERROR: mjv_updateSceneState: m->nbody changed
+
