@@ -115,5 +115,90 @@ class VectorizedPC:
                                                   downsample)
 
         return segmented_pc
+    
+    def centroids(self, pc):
+        """
+        Returns the centroids of the objects from the point cloud
+        generated from the frame.
+        
+        Parameters
+        ----------
+        pc : numpy.ndarray
+            The point cloud for each object
+        """
+
+        centroids = []
+        # Calculating the mean in x, y ,z for the point cloud of the object
+        for i in list(pc.keys()):
+            centroids.append(np.mean(pc[i], axis=0))
+
+        # For generating the open 3d Visualization
+
+        #complete_pc = np.empty((0, 3))
+        #colors = np.empty((0, 3))
+        #for i in list(pc.keys()):
+        #    complete_pc = np.vstack((complete_pc, pc[i]))
+        #    colors = np.vstack((colors, np.tile([0, 255, 0], (pc[i].shape[0], 1))))
+
+        #for center in centroids:
+        #    complete_pc = np.vstack((complete_pc, center))
+        #    colors = np.vstack((colors, np.tile([255, 0, 0], (1, 1))))
+        #pcd = o3d.geometry.PointCloud()
+        #pcd.points = o3d.utility.Vector3dVector(complete_pc)
+        #pcd.colors = o3d.utility.Vector3dVector(colors)
+        #o3d.visualization.draw_geometries([pcd])
+        return centroids
+
+    
+    def move_simple(self, *, t, func, axis=-1, model):
+        """
+        Moves the objects of the simulation in relation of the time       
+        Parameters
+        ----------
+        t : float
+            Time for the iteration
+        func : function
+            Defines the movement of the object
+        axis : int
+            Defines the direction of the movement
+        model : MjModel
+            Model of the scene
+        """
+        # Iterates over the geoms and moves them
+        for i in range(model.ngeom):
+            func=lambda x: (x/10) * 0.2 + 0.05*i
+
+            model.geom(i).pos[axis] = func(t)
+
+    def calc_vel(self, fin, ini, times, m):
+        """
+        Moves the objects of the simulation in relation of the time       
+        Parameters
+        ----------
+        times : list
+            Has the inicial and final time of movement
+        fin : list
+            Centroids of the geoms in the last frame
+        ini : int
+            Centroids of the geoms in the first frame
+        model : MjModel
+            Model of the scene
+        """
+        calc_v = {}
+        # Iterates through the geom's initial position and final position 
+        for i in range(m.ngeom):
+            # Calculates velocity
+            calc_vel = (fin[i] - ini[i])/(times[1]-times[0])
+            
+            # Puts together in a dictionary the postion and velocity per object
+            calc_v[m.geom(i).name] = np.append([ini[i]], calc_vel[0:3])
+
+
+        return calc_v
+
+
+        
+        
+   
 
         
