@@ -2,6 +2,11 @@ from datetime import datetime
 from typing import Iterable
 import numpy as np
 import pickle
+import torch
+from pathlib import Path
+
+
+MODELS_PATH = Path('models')
 
 
 def dist(p1, p2, get_vec=False):
@@ -50,3 +55,12 @@ def sliding(lst: Iterable, n: int):
     """ returns a sliding window of size n over a list lst """
     for window in zip(*[lst[i:] for i in range(n)]):
         yield window
+
+def save_model(model, name):
+    torch.save(model.state_dict(), MODELS_PATH/name)
+
+def load_model(model_cls, name, model_args=[], model_kwargs={}, cuda=True):
+    model = model_cls(*model_args, **model_kwargs)
+    model.load_state_dict(torch.load(MODELS_PATH/name))
+
+    return model.cuda() if cuda else model
