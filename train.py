@@ -6,7 +6,7 @@ import numpy as np
 
 from dataset import series_dloaders
 from network import ActionNet
-from utility import save_model
+from utility import ModelManager, save_model
 
 
 def train_epoch(model, dloader, *, opt, epoch, loss_fn):
@@ -52,22 +52,15 @@ def main():
     train_loader, test_loader, _ = series_dloaders()
     model = ActionNet(511, 256, 128, heads=32).cuda()
     optimizer = torch.optim.AdamW(model.parameters(), lr=0.001)
+    modelm = ModelManager('action', save_every=10, save_best=True)
 
     best_val_acc = 0
     for epoch in range(1, 10000):
         train_loss = train_epoch(model, train_loader, opt=optimizer, epoch=epoch, loss=MSELoss())
         test_mse = test_epoch(model, test_loader, epoch=epoch)
 
-        print(f'[Epoch {epoch:03d}] Train Loss: {train_loss:.4f}, Test MSE: {train_loss}')
-
-        # save best model based on validation f1
-        if best_val_acc < train_loss:
-            best_val_acc = train_loss
-            save_model(model, 'action_best_model.pt')
-
-        # save a model every 20 epochs
-        if epoch % 20 == 0:
-            save_model(model, f'action_best_model-{epoch}.pt')
+        print(f'[Epoch {epoch:03d}] Train Loss: {train_loss:.4f}, Test MSE: {test_mse}')
+        modelm.saves(model, epoch, test_mse)
 
 
 if __name__ == '__main__':

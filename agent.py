@@ -4,7 +4,7 @@ import numpy as np
 from numpy.linalg import norm
 
 from utility import uniform_displacevec, unit, body_pos
-from perlin_noise import PerlinNoise
+# from perlin_noise import PerlinNoise
 
 HERD_RADIUS = 0.5
 

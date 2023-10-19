@@ -1,6 +1,8 @@
 from torch_geometric.nn import GATv2Conv
+from torch.nn import Module
 
-class ActionNet(torch.nn.Module):
+
+class ActionNet(Module):
     def __init__(self, heads=32, concat=False):
         super().__init__()
         self.conv1 = GATv2Conv(4, 128, heads=heads, concat=False)
