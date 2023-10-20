@@ -1,3 +1,4 @@
+import time
 import torch
 from torch_geometric.data import InMemoryDataset, Data
 from tqdm import tqdm
@@ -13,10 +14,10 @@ SERIES_PATH = Path('/home/mk/Desktop/ma/data/23-09-26-17474581')
 
 def _get_nodes(series, include_robots=True):
 
-    humans = np.array([[*x['pos'], x['vel']] for x in series['humans']])
+    humans = np.array([[*x['pos'], *x['vel']] for x in series['humans']])
 
     if include_robots:
-        robots = np.array([[*x['pos'], x['vel']] for x in series['robots']])
+        robots = np.array([[*x['pos'], *x['vel']] for x in series['robots']])
         return np.vstack([robots, humans])
     
     return humans
@@ -34,13 +35,16 @@ def _get_nodes(series, include_robots=True):
 #     return nodes, edges
 
 def _get_pairgraph(prev_nodes, curr_nodes):
+    # prev = (robot, human). curr = (human)
     assert len(prev_nodes) != len(curr_nodes)
+    num_humans = len(curr_nodes)
+    num_robots = len(prev_nodes) - num_humans
 
     curr_eye = np.eye(len(curr_nodes))
     
     prev_adj = np.ones([len(prev_nodes)]*2) - np.eye(len(prev_nodes))
     curr_adj = np.ones([len(curr_nodes)]*2) - curr_eye
-    prevcurr_adj = np.vstack([np.zeros([len(curr_nodes)]*2), curr_eye])
+    prevcurr_adj = np.vstack([np.zeros([num_robots, num_humans]), curr_eye])
 
     nodes = np.vstack([prev_nodes, curr_nodes])
     adj = np.vstack([
@@ -103,15 +107,22 @@ class SeriesDataset(InMemoryDataset):
         torch.save((data, slices), self.processed_paths[0])
 
 
-def series_dloaders(chunks=((0, 8000), (8000, 9000), (9000, 10000)),
-                    batch_sizes=(64, 64, 1),
-                    shuffles=(True, True, False)):
-    transform = T.Compose(
-        # T.NormalizeFeatures(),
-        T.ToDevice('cuda'),
-    )
+def merge_dloaders(*dls):
+    for dl in dls:
+        for d in dl:
+            yield d
+
+def series_dloaders(chunks=((0, 2500), (2500, 5000), (5000, 7500), (7500, 10000)),
+                    batch_sizes=(1, 1, 1, 1),
+                    shuffles=(True, True, True, False)):
+    # TODO add mask arg for merging
+    # transform = T.Compose(
+    #     # T.NormalizeFeatures(),
+    #     # T.ToDevice('cuda')
+    # )
+    transform = None
 
     datasets = [SeriesDataset(SERIES_PATH, chunk=c, transform=transform) for c in chunks]
     loaders = [DataLoader(ds, batch_size=bs, shuffle=s, num_workers=8) for ds, bs, s in zip(datasets, batch_sizes, shuffles)]
 
-    return loaders
+    return merge_dloaders(*loaders[:3]), loaders[3] 

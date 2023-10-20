@@ -57,7 +57,7 @@ def sliding(lst: Iterable, n: int):
 
 
 class ModelManager:
-    def __init__(self, cls, name, time_dir='', *, save_every=(), save_best=True):
+    def __init__(self, cls, name, time_dir='', *, save_every=(), save_best=True, initial_score=np.inf):
         if not time_dir:
             self.dir = MODELS_PATH/time_label()
             self.dir.mkdir()
@@ -67,7 +67,7 @@ class ModelManager:
         self.save_every = (save_every,) if isinstance(save_every, int) else save_every
         self.save_best = save_best
 
-        self.best_score = 0
+        self.best_score = initial_score
         # TODO have epoch=best also save epoch number and regex for loading
 
     def save(self, model, *, epoch):
@@ -81,7 +81,7 @@ class ModelManager:
     
     def saves(self, model, epoch, score):
         if self.save_best:
-            if self.best_score < score:
+            if self.best_score > score:
                 self.best_score = score
                 self.save(model, epoch='best')
         for save_mult in self.save_every:

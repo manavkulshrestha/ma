@@ -6,10 +6,10 @@ import numpy as np
 
 from dataset import series_dloaders
 from network import ActionNet
-from utility import ModelManager, save_model
+from utility import ModelManager
 
 
-def train_epoch(model, dloader, *, opt, epoch, loss_fn):
+def train_epoch(model, dloader, *, opt, epoch, loss_fn, progress=False):
     model.train()
     train_loss = 0
     total_examples = 0
@@ -20,7 +20,7 @@ def train_epoch(model, dloader, *, opt, epoch, loss_fn):
         x, edge_idx, y = batch.x, batch.edge_index, batch.y 
         opt.zero_grad()
 
-        out = model(x, edge_idx)
+        out = model(x.float(), edge_idx)
 
         # get loss and update model
         batch_loss = loss_fn(out[len(y)], y)
@@ -32,7 +32,7 @@ def train_epoch(model, dloader, *, opt, epoch, loss_fn):
     return train_loss/total_examples
 
 @torch.no_grad()
-def test_epoch(model, dloader, *, epoch):
+def test_epoch(model, dloader, *, epoch, progress=False):
     model.eval()
     scores = []
 
@@ -41,7 +41,7 @@ def test_epoch(model, dloader, *, epoch):
         batch = batch.cuda()
         x, edge_idx, y = batch.x, batch.edge_index, batch.y 
 
-        out = model(x, edge_idx)
+        out = model(x.float(), edge_idx)
 
         score = mse(out[len(y)].cpu().numpy(), y.cpu().numpy())
         scores.append(score)
@@ -49,14 +49,13 @@ def test_epoch(model, dloader, *, epoch):
     return np.mean(scores)
 
 def main():
-    train_loader, test_loader, _ = series_dloaders()
-    model = ActionNet(511, 256, 128, heads=32).cuda()
+    train_loader, test_loader = series_dloaders()
+    model = ActionNet(heads=32, concat=False).cuda()
     optimizer = torch.optim.AdamW(model.parameters(), lr=0.001)
-    modelm = ModelManager('action', save_every=10, save_best=True)
+    modelm = ModelManager(ActionNet, 'action', save_every=10, save_best=True, initial_score=np.inf)
 
-    best_val_acc = 0
     for epoch in range(1, 10000):
-        train_loss = train_epoch(model, train_loader, opt=optimizer, epoch=epoch, loss=MSELoss())
+        train_loss = train_epoch(model, train_loader, opt=optimizer, epoch=epoch, loss_fn=MSELoss())
         test_mse = test_epoch(model, test_loader, epoch=epoch)
 
         print(f'[Epoch {epoch:03d}] Train Loss: {train_loss:.4f}, Test MSE: {test_mse}')

@@ -43,7 +43,7 @@ def run_episode(episode_path, episode_length=1000):
             t += 1
 
     return {
-        'num_robots': num_robots,
+        'num_robots': num_robots, 
         'num_humans': num_humans,
         'episode_length': len(timeseries_data),
         'timesteps': timeseries_data
