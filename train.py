@@ -3,6 +3,7 @@ from sklearn.metrics import mean_squared_error as mse
 from tqdm import tqdm
 from torch.nn import MSELoss
 import numpy as np
+from torch_geometric.nn import to_hetero
 
 from dataset import series_dloaders
 from network import ActionNet
@@ -17,13 +18,13 @@ def train_epoch(model, dloader, *, opt, epoch, loss_fn, progress=False):
     progress = tqdm if progress else lambda x, **kwargs: x
     for batch in progress(dloader, desc=f'[Epoch {epoch:03d}] training'):
         batch = batch.cuda()
-        x, edge_idx, y = batch.x, batch.edge_index, batch.y 
+        x, edge_idx, y = batch.x_dict, batch.edge_index_dict, batch['prev_robots'].y 
         opt.zero_grad()
 
-        out = model(x.float(), edge_idx)
+        out = model(x, edge_idx)
 
         # get loss and update model
-        batch_loss = loss_fn(out[len(y)], y)
+        batch_loss = loss_fn(out['prev_robots'], y)
         batch_loss.backward()
         opt.step()
         train_loss += batch_loss.item() * batch.num_graphs
@@ -39,27 +40,28 @@ def test_epoch(model, dloader, *, epoch, progress=False):
     progress = tqdm if progress else lambda x, **kwargs: x
     for batch in progress(dloader, desc=f'[Epoch {epoch:03d}] testing'):
         batch = batch.cuda()
-        x, edge_idx, y = batch.x, batch.edge_index, batch.y 
+        x, edge_idx, y = batch.x_dict, batch.edge_index_dict, batch['prev_robots'].y 
 
-        out = model(x.float(), edge_idx)
+        out = model(x, edge_idx)
 
-        score = mse(out[len(y)].cpu().numpy(), y.cpu().numpy())
+        score = mse(out['prev_robots'].cpu().numpy(), y.cpu().numpy())
         scores.append(score)
 
     return np.mean(scores)
 
 def main():
-    train_loader, test_loader = series_dloaders()
+    (train_loader, test_loader), metadata = series_dloaders(return_metadata=True)
     model = ActionNet(heads=32, concat=False).cuda()
+    model = to_hetero(model, metadata, aggr='sum')
     optimizer = torch.optim.AdamW(model.parameters(), lr=0.001)
     modelm = ModelManager(ActionNet, 'action', save_every=10, save_best=True, initial_score=np.inf)
 
-    for epoch in range(1, 10000):
-        train_loss = train_epoch(model, train_loader, opt=optimizer, epoch=epoch, loss_fn=MSELoss())
-        test_mse = test_epoch(model, test_loader, epoch=epoch)
+    # for epoch in range(1, 10000):
+    #     train_loss = train_epoch(model, train_loader, opt=optimizer, epoch=epoch, loss_fn=MSELoss())
+    #     test_mse = test_epoch(model, test_loader, epoch=epoch)
 
-        print(f'[Epoch {epoch:03d}] Train Loss: {train_loss:.4f}, Test MSE: {test_mse}')
-        modelm.saves(model, epoch, test_mse)
+    #     print(f'[Epoch {epoch:03d}] Train Loss: {train_loss:.4f}, Test MSE: {test_mse}')
+    #     modelm.saves(model, epoch, test_mse)
 
 
 if __name__ == '__main__':
