@@ -19,6 +19,7 @@ class ObjectPointCloudDataset(InMemoryDataset):
         self.sample_count = sample_count
         self.output_name = output_name
         self.qt_file = qt_file
+        self.transform = transform
 
         super().__init__(root, transform, pre_transform, pre_filter, log)
         if qt_file is not None:
@@ -44,16 +45,18 @@ class ObjectPointCloudDataset(InMemoryDataset):
         files.remove('processed')
 
         for i in range(self.chunk[0], self.chunk[1]):
+            
             # Load point cloud
             pc = np.load(os.path.join(self.root, files[i]))
 
-            pc = pc[np.random.choice(pc.shape[0], self.sample_count)]
-
-            # TODO: Normalize by dividing by standard deviation
-            pc = pc / np.std(pc)
-
             # Realign to origin
             pc = pc - np.mean(pc, axis=0)
+
+            # Select random sample
+            pc = pc[np.random.choice(pc.shape[0], self.sample_count), :]
+
+            # Normalize
+            pc = pc / np.max(np.linalg.norm(np.abs(pc), axis=1))
 
             # Obtaining id from filename
             id = int(files[i][:3])

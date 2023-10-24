@@ -165,13 +165,13 @@ if __name__ == '__main__':
     train_dataset = ObjectPointCloudDataset(root = '../dataset/v4', 
                                       chunk = (0, 87984), 
                                       sample_count = 512,
-                                      output_name = 'trainv3',
+                                      output_name = 'trainv9'
                                       )
     
     test_dataset = ObjectPointCloudDataset(root = '../dataset/v4', 
                                       chunk = (87984, 109980), 
                                       sample_count = 512,
-                                      output_name = 'testv3',
+                                      output_name = 'testv9'
                                       )
 
     # Create intances of dataloaders for training and testing
@@ -194,17 +194,17 @@ if __name__ == '__main__':
     # TODO: Check if lr is correct or test with different ones
     optimizer = torch.optim.Adam(model.parameters(), lr=0.001)
 
-    # # Train the model
-    for epoch in range(1, 101):
+    # # # Train the model
+    # for epoch in range(1, 101):
         
-        train(epoch)
-        test_acc = test(test_loader)
-        print(f'Epoch: {epoch:03d}, Test: {test_acc:.4f}')
+    #     train(epoch)
+    #     test_acc = test(test_loader)
+    #     print(f'Epoch: {epoch:03d}, Test: {test_acc:.4f}')
 
-        if epoch % 1 == 0:
-            torch.save({
-                'epoch': epoch,
-                'model_state_dict': model.state_dict(),
-                'optimizer_state_dict': optimizer.state_dict(),
-                'loss': test_acc
-            }, f'model_{epoch}_{test_acc}.pt')
+    #     if epoch % 1 == 0:
+    #         torch.save({
+    #             'epoch': epoch,
+    #             'model_state_dict': model.state_dict(),
+    #             'optimizer_state_dict': optimizer.state_dict(),
+    #             'loss': test_acc
+    #         }, f'model_{epoch}_{test_acc}.pt')
