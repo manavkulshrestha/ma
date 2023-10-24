@@ -36,8 +36,8 @@ class Agent:
         return class_desc
 
     def vector(self):
-        vector = np.concatenate((self.shape_feature_vect,
-                                 self.curr_pos,
-                                 self.vel,
-                                 self.battery))
+        vector = np.concatenate((self.shape_feature_vect,   # 256 values
+                                 self.curr_pos,             # 3 valeus
+                                 self.vel,                  # 3 values
+                                 [self.battery]))           # 1 values
         return vector
