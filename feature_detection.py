@@ -3,6 +3,10 @@ import os.path as osp
 import torch
 import torch.nn.functional as F
 
+# Adding tensorboard
+from torch.utils.tensorboard import SummaryWriter
+writer = SummaryWriter()
+
 import torch_geometric.transforms as T
 from torch_geometric.datasets import ModelNet
 from torch_geometric.loader import DataLoader
@@ -114,6 +118,8 @@ def train(epoch):
         optimizer.zero_grad()
         # Compute loss
         loss = F.nll_loss(model(data)[0], data.y.type(torch.LongTensor).to(device))
+        # Write loss to tensorboard
+        writer.add_scalar("Loss/train", loss, epoch)
         # Compute gradients
         loss.backward()
         # Update parameters
@@ -135,6 +141,8 @@ def test(loader):
             pred = model(data)[0].max(1)[1]
         # Compute accuracy
         correct += pred.eq(data.y).sum().item()
+        # Write accuracy to tensorboard
+        writer.add_scalar("Accuracy/test", correct / len(loader.dataset), epoch)
 
     # Return accuracy
     return correct / len(loader.dataset)
@@ -196,17 +204,17 @@ if __name__ == '__main__':
     # TODO: Check if lr is correct or test with different ones
     optimizer = torch.optim.Adam(model.parameters(), lr=0.001)
 
-    # # # Train the model
-    # for epoch in range(1, 101):
+    # Train the model
+    for epoch in range(1, 101):
         
-    #     train(epoch)
-    #     test_acc = test(test_loader)
-    #     print(f'Epoch: {epoch:03d}, Test: {test_acc:.4f}')
+        train(epoch)
+        test_acc = test(test_loader)
+        print(f'Epoch: {epoch:03d}, Test: {test_acc:.4f}')
 
-    #     if epoch % 1 == 0:
-    #         torch.save({
-    #             'epoch': epoch,
-    #             'model_state_dict': model.state_dict(),
-    #             'optimizer_state_dict': optimizer.state_dict(),
-    #             'loss': test_acc
-    #         }, f'model_{epoch}_{test_acc}.pt')
+        if epoch % 1 == 0:
+            torch.save({
+                'epoch': epoch,
+                'model_state_dict': model.state_dict(),
+                'optimizer_state_dict': optimizer.state_dict(),
+                'loss': test_acc
+            }, f'model_{epoch}_{test_acc}.pt')
