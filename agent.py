@@ -22,7 +22,7 @@ class Agent:
         class_desc = ""
 
         class_desc += f"Agent: {self.name}\n"
-        class_desc += f"Shape Feature Vector: {self.shape_feature_vect}\n"
+        class_desc += f"Shape Feature Vector: {self.shape_feature_vect.shape}\n"
         class_desc += f"Previous Position: {self.prev_pos}\n"
         class_desc += f"Current Position: {self.curr_pos}\n"
         class_desc += f"Velocity vector: {self.vel}\n"

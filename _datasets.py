@@ -56,7 +56,7 @@ class ObjectPointCloudDataset(InMemoryDataset):
             pc = pc[np.random.choice(pc.shape[0], self.sample_count), :]
 
             # Normalize
-            pc = pc / np.max(np.linalg.norm(np.abs(pc), axis=1))
+            # pc = pc / np.max(np.linalg.norm(np.abs(pc), axis=1))
 
             # Obtaining id from filename
             id = int(files[i][:3])
@@ -78,6 +78,9 @@ class ObjectPointCloudDataset(InMemoryDataset):
 
         if self.pre_transform is not None:
             data_list = [self.pre_transform(data) for data in data_list]
+
+        # if self.transform is not None:
+        #     data = data if self.transform is None else self.transform(data)
         # print('done with pretransform')
         data, slices = self.collate(data_list)
         # print('done collating')

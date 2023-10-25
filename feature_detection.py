@@ -165,13 +165,15 @@ if __name__ == '__main__':
     train_dataset = ObjectPointCloudDataset(root = '../dataset/v4', 
                                       chunk = (0, 87984), 
                                       sample_count = 512,
-                                      output_name = 'trainv9'
+                                      output_name = 'trainv_nom',
+                                      transform=T.NormalizeFeatures()
                                       )
     
     test_dataset = ObjectPointCloudDataset(root = '../dataset/v4', 
                                       chunk = (87984, 109980), 
                                       sample_count = 512,
-                                      output_name = 'testv9'
+                                      output_name = 'testv_nom',
+                                      transform=T.NormalizeFeatures()
                                       )
 
     # Create intances of dataloaders for training and testing
