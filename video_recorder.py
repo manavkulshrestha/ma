@@ -1,7 +1,7 @@
 import numpy as np
 import mediapy as media
 import matplotlib.pyplot as plt
-import cv2
+# import cv2
 
 class Recorder():
     def __init__(self, duration, fps, n_cameras, folder="./../img/"):
@@ -54,12 +54,12 @@ class Recorder():
             
 
 
-    def write_video_cv2(self, frames, name):
-        size = 720*16//9, 720
-        duration = 2
-        fps = 25
-        out = cv2.VideoWriter('output.mp4', cv2.VideoWriter_fourcc(*'DIVX'), fps, (size[1], size[0]), False)
-        for _ in range(fps * duration):
-            data = np.random.randint(0, 256, size, dtype='uint8')
-            out.write(data)
-        out.release()
+    # def write_video_cv2(self, frames, name):
+    #     size = 720*16//9, 720
+    #     duration = 2
+    #     fps = 25
+    #     out = cv2.VideoWriter('output.mp4', cv2.VideoWriter_fourcc(*'DIVX'), fps, (size[1], size[0]), False)
+    #     for _ in range(fps * duration):
+    #         data = np.random.randint(0, 256, size, dtype='uint8')
+    #         out.write(data)
+    #     out.release()

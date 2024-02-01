@@ -107,10 +107,10 @@ class VectorizedPC:
 
         segmented_pc = {}
 
+        frame[segmentation == -1] = np.nan
         for value in values:
             frame_copy = frame.copy()
             frame_copy[segmentation != value] = np.nan
-            frame_copy[segmentation == -1] = np.nan
             segmented_pc[value] = self.get_points(frame_copy, 
                                                   rotation, 
                                                   position, 
@@ -155,8 +155,6 @@ class VectorizedPC:
         """
         # Iterates over the geoms and moves them
         for i in range(model.ngeom):
-            func=lambda x: (x) * 0.2
-
             model.geom(i).pos[axis] += func(t)
 
         return model
