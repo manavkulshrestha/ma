@@ -1,0 +1,53 @@
+cat /sys/class/dmi/id/chassis_type
+b
+
+
+# Installing mujoco
+pip install mujoco
+conda env config vars set PYOPENGL_PLATFORM=egl
+conda env config vars set MUJOCO_GL=egl
+conda install -c conda-forge glew
+conda install -c conda-forge mesalib
+conda install -c anaconda mesa-libgl-cos6-x86_64
+conda install -c menpo glfw3
+
+pip install ipykernel
+
+
+
+conda create --name mujoco-torch python=3.10.13
+conda activate mujoco-torch
+conda install pytorch torchvision torchaudio pytorch-cuda=11.8 -c pytorch -c nvidia
+conda install pyg -c pyg
+pip install mujoco
+conda install -c conda-forge libstdcxx-ng
+conda env config vars set PYOPENGL_PLATFORM=egl
+conda deactivate
+conda activate mujoco-torch
+conda env config vars set MUJOCO_GL=egl
+conda deactivate
+conda activate mujoco-torch
+conda env config vars list
+pip install open3d
+
+
+
+
+pip install ipykernel
+conda install pytorch torchvision torchaudio pytorch-cuda=12.1 -c pytorch -c nvidia
+pip install torch_geometric
+pip install pyg_lib torch_scatter torch_sparse torch_cluster torch_spline_conv -f https://data.pyg.org/whl/torch-2.1.0+cu121.html
+pip install open3d
+conda install -c conda-forge mujoco
+pip3 install torch torchvision torchaudio
+conda install -c pyg pyg
+
+conda install -c anaconda cmake 
+
+git clone https://github.com/google-deepmind/mujoco_mpc.git
+cd mujoco_mpc/python
+python setup.py install
+
+# If problems with XInput
+sudo apt-get update -y
+sudo apt-get install -y xorg-dev
