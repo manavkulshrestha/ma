@@ -24,18 +24,45 @@ class Sim:
             except Exception as e:
                 print(e)
                 return
-                
+        
         self.d = mj.MjData(self.m)
 
+        # Setting up the initial value of the joints
+        self.d.ctrl = [0, 0, -0.888,
+                       0, 0, -0.888,
+                       0, 0, -0.888,
+                       0, 0, -0.888,]
+
+        self.step = 0
+        self.switch = True
+
     def start_debug(self):
-        pass
+        print(f"Actuator: {self.d.act}")
+        print(f"Control: {self.d.ctrl}")
 
     def run_debug(self):
-        pass
+        if self.step % 100 == 0:
+            self.start_debug()
+            self.switch = not self.switch
+            self.step += 1
+        else:
+            self.step += 1
+
+        self.ctrl()
 
     # Abstract class to control the simulation
     def ctrl(self):
         pass
+        # if self.switch:
+        #     self.d.ctrl = [0, 0, -0.888,
+        #                    0, 0, -0.888,
+        #                    0, 0, -0.888,
+        #                    0, 0, -0.888,]
+        # else:
+        #     self.d.ctrl = [0, 0, -2,
+        #                    0, 0, -2,
+        #                    0, 0, -2,
+        #                    0, 0, -2,]
 
     def view_sim(self, debug=False):
         # Debugging
@@ -45,7 +72,7 @@ class Sim:
         with mujoco.viewer.launch_passive(self.m, self.d) as viewer:
             while viewer.is_running():
                 # Call the control function
-                self.ctrl()
+                # self.ctrl()
 
                 # Debugging
                 if debug:
