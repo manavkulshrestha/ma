@@ -13,7 +13,10 @@ class inv_kin:
         self.phi = phi
         pass
 
-    def single_leg_ik(self, x, y, z) -> list:
+    def single_leg_ik(self, x, y, z, a1) -> list:
+
+        # YZ-Plane
+
         # Finding length from leg origin to target
         d = np.linalg.norm([x,y])
 
@@ -22,3 +25,9 @@ class inv_kin:
 
         # Finding angle relative to origin
         a3 = np.pi - a2 - self.phi
+
+        # Finding the angle respect to the XY-plane
+        theta1 = a1 - a3
+
+
+        # XZ-Plane 

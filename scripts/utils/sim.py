@@ -2,12 +2,29 @@ import mujoco as mj
 import mujoco.viewer
 import time
 
+# Utility class to run a simulation
+# Runs a mujoco xml and allows to control it
+
 class Sim:
 
     def __init__(self,
-                 xml):
-        self.xml = xml
-        self.m = mj.MjModel.from_xml_string(xml)
+                 xml_stirng = None,
+                 xml_path = None):
+        
+        if xml_stirng is not None:
+            try:
+                self.m = mj.MjModel.from_xml_string(xml_stirng)
+            except Exception as e:
+                print(e)
+                return
+
+        elif xml_path is not None:
+            try:
+                self.m = mj.MjModel.from_xml_path(xml_path)
+            except Exception as e:
+                print(e)
+                return
+                
         self.d = mj.MjData(self.m)
 
     def start_debug(self):
