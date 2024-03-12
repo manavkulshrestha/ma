@@ -27,7 +27,7 @@ from matplotlib import pyplot as plt
 import numpy as np
 from scipy.interpolate import splprep, splev
 
-def create_trajectory(curr_pos, bounds=[0,1], num_keypoints=10, length=1000, display=False):
+def create_trajectory(curr_pos, bounds=[0,1], num_keypoints=10, length=500, display=False):
     '''
     Generates a smooth trajectory of given size, starting at the given location, within the given bounds.
 
@@ -147,9 +147,71 @@ class KeyboardController:
         self.last_keypress = None  # Last detected keypress
         self.keypress_mapping = None
         self.use_omnidirectional_base = robot.model_name in ["Tiago"]  # add other robots with omnidirectional bases
+        self.populate_keypress_mapping()
         self.time_last_keyboard_input = time.time()
 
-   
+    def populate_keypress_mapping(self):
+        """
+        Populates the mapping @self.keypress_mapping, which maps keypresses to action info:
+
+            keypress:
+                idx: <int>
+                val: <float>
+        """
+        self.keypress_mapping = {}
+        self.joint_control_idx = set()
+
+        # Add mapping for joint control directions (no index because these are inferred at runtime)
+        self.keypress_mapping["]"] = {"idx": None, "val": 0.1}
+        self.keypress_mapping["["] = {"idx": None, "val": -0.1}
+
+        # Iterate over all controller info and populate mapping
+        for component, info in self.controller_info.items():
+            if self.use_omnidirectional_base:
+                self.keypress_mapping["i"] = {"idx": 0, "val": 2.0}
+                self.keypress_mapping["k"] = {"idx": 0, "val": -2.0}
+                self.keypress_mapping["u"] = {"idx": 1, "val": 1.0}
+                self.keypress_mapping["o"] = {"idx": 1, "val": -1.0}
+                self.keypress_mapping["j"] = {"idx": 2, "val": 1.0}
+                self.keypress_mapping["l"] = {"idx": 2, "val": -1.0}
+            if info["name"] == "JointController":
+                for i in range(info["command_dim"]):
+                    ctrl_idx = info["start_idx"] + i
+                    self.joint_control_idx.add(ctrl_idx)
+            elif info["name"] == "DifferentialDriveController":
+                self.keypress_mapping["i"] = {"idx": info["start_idx"] + 0, "val": 0.2}
+                self.keypress_mapping["k"] = {"idx": info["start_idx"] + 0, "val": -0.2}
+                self.keypress_mapping["l"] = {"idx": info["start_idx"] + 1, "val": 0.1}
+                self.keypress_mapping["j"] = {"idx": info["start_idx"] + 1, "val": -0.1}
+            elif info["name"] == "InverseKinematicsController":
+                self.keypress_mapping["up_arrow"] = {"idx": info["start_idx"] + 0, "val": 0.5}
+                self.keypress_mapping["down_arrow"] = {"idx": info["start_idx"] + 0, "val": -0.5}
+                self.keypress_mapping["right_arrow"] = {"idx": info["start_idx"] + 1, "val": -0.5}
+                self.keypress_mapping["left_arrow"] = {"idx": info["start_idx"] + 1, "val": 0.5}
+                self.keypress_mapping["p"] = {"idx": info["start_idx"] + 2, "val": 0.5}
+                self.keypress_mapping[";"] = {"idx": info["start_idx"] + 2, "val": -0.5}
+                self.keypress_mapping["n"] = {"idx": info["start_idx"] + 3, "val": 0.5}
+                self.keypress_mapping["b"] = {"idx": info["start_idx"] + 3, "val": -0.5}
+                self.keypress_mapping["o"] = {"idx": info["start_idx"] + 4, "val": 0.5}
+                self.keypress_mapping["u"] = {"idx": info["start_idx"] + 4, "val": -0.5}
+                self.keypress_mapping["v"] = {"idx": info["start_idx"] + 5, "val": 0.5}
+                self.keypress_mapping["c"] = {"idx": info["start_idx"] + 5, "val": -0.5}
+            elif info["name"] == "MultiFingerGripperController":
+                if info["command_dim"] > 1:
+                    for i in range(info["command_dim"]):
+                        ctrl_idx = info["start_idx"] + i
+                        self.joint_control_idx.add(ctrl_idx)
+                else:
+                    self.keypress_mapping[" "] = {"idx": info["start_idx"], "val": 1.0}
+                    self.persistent_gripper_action = 1.0
+            elif info["name"] == "NullGripperController":
+                # We won't send actions if using a null gripper controller
+                self.keypress_mapping[" "] = {"idx": info["start_idx"], "val": None}
+            else:
+                raise ValueError("Unknown controller name received: {}".format(info["name"]))
+
+
+
 def main(selection="user", headless=False, short_exec=False):
     """
     Robot control demo with selection
@@ -166,6 +228,7 @@ def main(selection="user", headless=False, short_exec=False):
     robot = REGISTERED_ROBOTS[robot_name](action_type="continuous")
     
     # Import the robot to the simulation
+    #print(type(robot))
     s.import_object(robot)
 
     # For the second and further selections, we either as the user or randomize
@@ -173,7 +236,8 @@ def main(selection="user", headless=False, short_exec=False):
     selection = "random"
     control_mode = "random"
     controller_choices = choose_controllers(robot=robot, selection=selection)
-    print("controller_choices: ",controller_choices)
+    
+    #print("controller_choices: ",controller_choices)
 
     # Choose scene to load
     scene_id = "empty" # You are choosing the empty scene
@@ -245,9 +309,12 @@ def main(selection="user", headless=False, short_exec=False):
         s.viewer.reset_viewer()
     
     
+    # Create teleop controller
+    action_generator = KeyboardController(robot=robot, simulator=s)
+
     # Other helpful user info
-    print("Running demo. Switch to the viewer windows")
-    print("Press ESC to quit")
+    #print("Running demo. Switch to the viewer windows")
+    #print("Press ESC to quit")
 
     # Loop control until user quits
     max_steps = -1 if not short_exec else 100
@@ -264,7 +331,7 @@ def main(selection="user", headless=False, short_exec=False):
     
     vs_id_spline = p.createVisualShape(p.GEOM_SPHERE, radius=0.1, rgbaColor=[1, 1, 1, 1])
     vs_id_keypoints = p.createVisualShape(p.GEOM_SPHERE, radius=0.1, rgbaColor=[1, 1, 0, 1])
-    vs_id_target = p.createVisualShape(p.GEOM_SPHERE, radius=0.1, rgbaColor=[1, 0, 0, 1])
+    vs_id_target = p.createVisualShape(p.GEOM_SPHERE, radius=0.12, rgbaColor=[1, 0, 0, 1])
 
 
 
@@ -273,7 +340,7 @@ def main(selection="user", headless=False, short_exec=False):
     targets = np.multiply(targets, 10)
 
     # Plotting the trajectory
-    for i in range(0, trajectory[0].size, 20):
+    for i in range(0, trajectory[0].size, 500):
         x = trajectory[0][i] 
         y = trajectory[1][i]
         p.createMultiBody(basePosition=[trajectory[0][i], trajectory[1][i], 0.01063783], baseCollisionShapeIndex=-1, baseVisualShapeIndex=vs_id_spline)
@@ -319,34 +386,32 @@ def main(selection="user", headless=False, short_exec=False):
         error = np.sqrt(np.power(x_pos,2) + np.power(y_pos,2))
         
         ################ Controller parameters
-        # For angular
-        kp= 0.10139 
+
+        kp= 0.17139 
         kd= 0.005 
 
         # For linear
-        kp_ = 0.007535 
-        kd_ = 0.00005 
-        
+        kp_ = 0.03535 
+        kd_ = 0.005 
+
         lin_vel = error * kp_ + (error-prev_error)*kd_
         ang_vel = kp * error_ang + (error_ang - prev_error_ang)*kd
-        print(error_ang)
-
-        print(ang_vel)
+        
         command = [lin_vel,ang_vel]
         velocities = DifferentialDriveController._command_to_control(command, command, velocities) 
+        #lin_vel, ang_vel = velocities # Velocities for wheels
         joints = robot._joints.values()
         for joint, vel in zip(joints, velocities):
             joint.set_vel(vel)
-
-        if error < 0.1: # Error threshold
-            robot.apply_action([lin_vel, -ang_vel])
-            # Plotting the target
-            target_index += 10
+        #print(ang_vel)
+        robot.apply_action([lin_vel, -ang_vel])
+        # Plotting the target
+        if step % 100 == 0:
+            target_index += 1
             target_pos = [trajectory[0][target_index],trajectory[1][target_index]]
             p.removeBody(target_id)
             target_id = p.createMultiBody(basePosition=[target_pos[0], target_pos[1], 0.01063783], baseCollisionShapeIndex=-1, baseVisualShapeIndex=vs_id_target)
-
-
+      
         prev_error = error
         prev_error_ang = error_ang
 
